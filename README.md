@@ -21,10 +21,21 @@ attending to different events. The application integrates personalize features s
 personal preferences, weather updates/situation and a personalized calendar.
    
 The main objectives of the application are:
- - Simplifying Event Mangement
- - Focus on User Experience
- - Personalization 
- - Scalability and reliability
+- Enhanced Collaboration for Organizers
+     - Facilitate seamless collaboration among event organizers by providing features that enable easy sharing of event details and coordination.
+     - Offer collaborative tools for multiple organizers to contribute to event planning, ensuring a unified and well-coordinated approach.
+ - Efficient Communication Channels
+     - Implement efficient communication channels within the application to foster better interaction between event organizers and attendees.
+     - Provide real-time updates and messaging features to enhance communication regarding event details, changes, and important announcements.
+ - Smart Resource Management
+     - Assist organizers in optimizing resource allocation for events, including venue selection, budgeting, and logistics.
+     - Integrate smart resource management tools to help organizers make informed decisions, maximizing the impact of their events.
+- Seamless Integration with External Platforms
+     - Ensure seamless integration with popular external platforms, such as social media and calendar applications.
+     - Allow users to share events on social platforms effortlessly and sync event schedules with their existing calendars for a cohesive experience.
+ - Accessibility and Inclusivity
+     - Prioritize accessibility features to make the application inclusive for users with diverse needs and abilities.
+     - Implement design and functionality considerations that cater to a wide range of users, promoting inclusivity in event participation.
 
 #### Product statement and vision
    Eventplanner as an application came out as a solution due to multiple problems. Some of them would be fragmentation
@@ -37,46 +48,49 @@ application. The application will serve as main point in event management and pl
    As an all-in-one event planner and management solution, out application propose a large set of features and 
 functionalities in order to provide a seamless and intuitive platform which caters to the large range of needs
 of event organisers and attendees.
-- Event Creation
-     - Users can create events, specifying essential details such as the event name, date, time, and location.
-     - Options to add additional information like event descriptions, categories etc
- - Invitation Management
-     - Ability to send digital invitations to friends, colleagues, or a broader audience.
-     - Features to customize invitation templates and track responses (RSVPs).
- - RSVP tracking
-     - Functionality for invitees to respond to invitations, confirming or declining attendance.
-     - Real-time updates to the event organiser on the status of invitations and attendee list.
- - Personal preferences
-     - Users can set and modify their preferences for event types, locations, and time frames.
-     - The application uses these preferences to recommend relevant events to users.
- - Event discovery and recommendations
-     - A dynamic discovery feature that suggests events based on user preferences, past attendance, and popular trends.
-     - Options for users to explore events by categories, dates, or locations
- - Weather Information
-     - Real-time weather updates and forecasts for event locations.
-     - Notifications to users about weather conditions on the day of the event, aiding in planning and preparation.
- - Personal Calendar     
-     - Integration with users’ personal calendars to automatically update with their event schedules.
-     - Reminders and notifications for upcoming events to ensure users are well-prepared.
- - Customized notifications
-     - Personalized alerts for event changes, reminders, invitations, and weather updates.
-     - Adjustable notification settings to suit user preferences.
- - Feedback and rating
-     - After-event features for attendees to rate and provide feedback on events.
-     - Insights for organisers to gauge the success of their events and areas for improvement.
+- Performance
+  - Response Time
+    - The application should achieve an average response time of less than 2 seconds for key user interactions, such as event creation, invitation sending, and RSVP tracking.
+    - Specific actions, like loading event details or updating preferences, should have response times within milliseconds to ensure a snappy user experience.
 
-#### Non-functional requirements
-   The non-function specifications guarantee that the program fulfills its functional goals and provides
-   a dependable, safe, and effective user experience. The application's non-functional requirements are:
- - Performance
-   - SLO: The application should have an average response time of less than 2 seconds under normal load conditions.
-   - SLI: Guaranteed uptime of 99.5% 
- - Usability 
-   - SLO: Achieve a user satisfaction score of at least 85% in usability surveys
- - Scalability
-   - SLO: The system should efficiently handle a 50% increase in user traffic without impacting performance metrics.
- - Compliance and Standards
-   - SLO: Full compliance with GDPR
+  - Scalability
+    - The system should maintain the specified response time even under a 50% increase in concurrent user traffic.
+    - Performance testing will be conducted regularly to identify and address potential bottlenecks as user load grows.
+
+- Database Scalability
+  - The database architecture should scale horizontally to accommodate a growing volume of event data without compromising query response times.
+  - The database system should efficiently handle CRUD operations, ensuring optimal performance for Create, Read, Update, and Delete actions.
+
+- Usability
+  - User Satisfaction (SLI)
+    - Conduct regular usability surveys to gauge user satisfaction, aiming for a score of at least 85%.
+    - Actively gather user feedback and implement iterative improvements to enhance overall usability.
+
+  - Accessibility (SLO)
+    - Maintain compliance with Web Content Accessibility Guidelines (WCAG), ensuring accessibility for users with diverse needs.
+    - Conduct quarterly accessibility testing to verify ongoing adherence to standards.
+
+- Scalability
+  - User Traffic Increase (SLO)
+    - The system should efficiently handle a 50% increase in user traffic without a proportional decrease in performance.
+    - Employ load balancing, caching strategies, and horizontal scaling to distribute the increased load effectively.
+
+- Compliance and Standards
+  - GDPR Compliance (SLO)
+    - Ensure full compliance with the General Data Protection Regulation (GDPR) standards.
+    - Implement robust data protection measures, including user consent mechanisms, data encryption, and the right to erasure.
+    - Conduct annual GDPR compliance audits to verify ongoing adherence.
+
+- Database Operations
+  - CRUD Functionality
+    - The database system should support CRUD operations (Create, Read, Update, Delete) for efficient management of event-related data.
+    - Data integrity and consistency should be maintained throughout all database transactions.
+
+- Compatibility
+  -  Operating System Compatibility (SLO)
+    - Ensure seamless compatibility with the Windows operating system, optimizing the application for Windows-based devices and browsers.
+    - Conduct bi-annual compatibility testing to address any potential issues related to Windows updates or changes.
+
 #### Product backlog
    In order to have a clear overview of feature, task and requirement, based on importance and impact to project 
    success, a backlog list is necessary.
