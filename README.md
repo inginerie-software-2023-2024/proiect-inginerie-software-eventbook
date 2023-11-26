@@ -55,7 +55,6 @@ of event organisers and attendees.
 
   - Scalability
     - The system should maintain the specified response time even under a 50% increase in concurrent user traffic.
-    - Performance testing will be conducted regularly to identify and address potential bottlenecks as user load grows.
 
 - Database Scalability
   - The database architecture should scale horizontally to accommodate a growing volume of event data without compromising query response times.
@@ -87,9 +86,7 @@ of event organisers and attendees.
     - Data integrity and consistency should be maintained throughout all database transactions.
 
 - Compatibility
-  -  Operating System Compatibility (SLO)
-    - Ensure seamless compatibility with the Windows operating system, optimizing the application for Windows-based devices and browsers.
-    - Conduct bi-annual compatibility testing to address any potential issues related to Windows updates or changes.
+  - Ensure optimal performance and compatibility of the web application across various browsers. Focus on maintaining consistent functionality and performance across different devices, including those operating on Windows systems.
 
 #### Product backlog
    In order to have a clear overview of feature, task and requirement, based on importance and impact to project 
