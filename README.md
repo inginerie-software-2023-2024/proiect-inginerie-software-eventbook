@@ -3,8 +3,8 @@
 ### Content
 - [Introduction](#introduction)
 - [Product statement-vision](#product-statement-and-vision)
-- [Product features-functionalities](#product-features-and-functionalities)
 - [Non-Functional requirements](#non-functional-requirements)
+- [Product features and functionalities](#product-features-and-functionalities)
 - [Product backlog](#product-backlog)
 - [Project Roadmap](#project-roadmap)
 - [Activity overview](#activity-overview)
@@ -44,7 +44,7 @@ discovery, lack of personalization in user experience and difficulties in event 
    Our solution aims to solve these problems by creating a comprehensive, user-centric, centralized event management
 application. The application will serve as main point in event management and planning.
 
-#### Product features and functionalities
+#### Non-functional requirements
    As an all-in-one event planner and management solution, out application propose a large set of features and 
 functionalities in order to provide a seamless and intuitive platform which caters to the large range of needs
 of event organisers and attendees.
@@ -88,6 +88,24 @@ of event organisers and attendees.
 - Compatibility
   - Ensure optimal performance and compatibility of the web application across various browsers. Focus on maintaining consistent functionality and performance across different devices, including those operating on Windows systems.
 
+#### Product features and functionalities
+The Eventplanner application encompasses a range of features and functionalities designed to streamline the event planning and management process. These features are structured to align with the project's vision and address the needs of both event organizers and attendees.
+Features:
+- User Account Management: Registration, login, profile management
+- Event Creation and Editing: Interface for creating and editing events, including title, description, date, and time.
+- Invitations and Guest Management: Electronic invitations, RSVP tracking, and guest list management.
+- Notification System: In-app notifications for event updates and reminders.
+- Personalized Event Recommendations: Tailored suggestions based on user preferences and interests.
+- Calendar Integration: Synchronization with personal calendars for efficient schedule management.
+- Venue Database and Booking: Comprehensive database of venues with filters and booking functionality.
+- Weather Updates: Real-time weather information for event locations.
+- Interactive Event Timeline: A visual timeline for event planning and tracking progress.
+- Collaboration Tools: Features for multiple organizers to work together on a single event.
+
+Integration Points
+Calendar Applications: For syncing event dates and reminders.
+Weather Services: To provide accurate weather forecasts for event days.
+
 #### Product backlog
    In order to have a clear overview of feature, task and requirement, based on importance and impact to project 
    success, a backlog list is necessary.
@@ -114,6 +132,48 @@ of event organisers and attendees.
 - Notification System 
    - Email and in-app notifications for event updates
    - Reminders for important dates and tasks
+ 
+User Account Management
+Registration and Login Functionality
+Given a user wants to access personalized features, when they visit the app, then they should be able to register or log in.
+Linked to User Story: "As a user, I want to set my personal preferences for events..."
+Sprint 1 Inclusion: Yes
+
+Profile Creation and Editing
+Given a user needs to update their information or preferences, when they access their account, then they should be able to edit their profile.
+Sprint 1 Inclusion: Yes
+
+Given an organizer needs to change event details or cancel an event, when they access their event, then they should be able to edit or delete it.
+Linked to User Story: "As an event organizer, I want to easily create events..."
+Sprint 1 Inclusion: Yes
+
+Calendar Integration for Event Scheduling
+Given a user wants to manage their schedule, when they create or RSVP to an event, then the event should be integrated into their personal calendar.
+Linked to User Story: "As a user, I want to synchronize my personal calendar..."
+Sprint 1 Inclusion: No (Future Sprint)
+
+Integration with Maps for Venue Location
+Given a user views an event, when they look at event details, then they should see the venue location on a map.
+Sprint 1 Inclusion: No (Future Sprint)
+
+Invitations and Guest Management
+Given an organizer has created an event, when they want to invite guests, then they should be able to send electronic invitations.
+Linked to User Story: "As a user, I want to invite friends and colleagues..."
+Sprint 1 Inclusion: Yes
+
+Tracking RSVPs
+Given an organizer has sent invitations, when guests respond, then the organizer should be able to track RSVPs.
+Sprint 1 Inclusion: Yes
+Managing Guest Lists
+
+Given an organizer is managing their event, when they view the event details, then they should be able to see and manage the guest list.
+Sprint 1 Inclusion: Yes
+
+Notification System
+Given there is an update or change in event details, when this occurs, then attendees should receive notifications.
+Linked to User Story: "As an event attendee, I want to receive weather updates..."
+Sprint 1 Inclusion: Yes
+
 #### Project Roadmap
    In order to outline the key stages and have a milestone planning a project roadmap
 diagram is recommended.
