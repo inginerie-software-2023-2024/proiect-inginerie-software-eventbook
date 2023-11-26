@@ -26,15 +26,8 @@ The main objectives of the application are:
      - Offer collaborative tools for multiple organizers to contribute to event planning, ensuring a unified and well-coordinated approach.
  - Efficient Communication Channels
      - Implement efficient communication channels within the application to foster better interaction between event organizers and attendees.
-     - Provide real-time updates and messaging features to enhance communication regarding event details, changes, and important announcements.
- - Smart Resource Management
-     - Assist organizers in optimizing resource allocation for events, including venue selection, budgeting, and logistics.
-     - Integrate smart resource management tools to help organizers make informed decisions, maximizing the impact of their events.
-- Seamless Integration with External Platforms
-     - Ensure seamless integration with popular external platforms, such as social media and calendar applications.
-     - Allow users to share events on social platforms effortlessly and sync event schedules with their existing calendars for a cohesive experience.
+     - Provide real-time updates features to enhance communication regarding event details, changes, and important announcements.
  - Accessibility and Inclusivity
-     - Prioritize accessibility features to make the application inclusive for users with diverse needs and abilities.
      - Implement design and functionality considerations that cater to a wide range of users, promoting inclusivity in event participation.
 
 #### Product statement and vision
@@ -69,11 +62,6 @@ of event organisers and attendees.
     - Maintain compliance with Web Content Accessibility Guidelines (WCAG), ensuring accessibility for users with diverse needs.
     - Conduct quarterly accessibility testing to verify ongoing adherence to standards.
 
-- Scalability
-  - User Traffic Increase (SLO)
-    - The system should efficiently handle a 50% increase in user traffic without a proportional decrease in performance.
-    - Employ load balancing, caching strategies, and horizontal scaling to distribute the increased load effectively.
-
 - Compliance and Standards
   - GDPR Compliance (SLO)
     - Ensure full compliance with the General Data Protection Regulation (GDPR) standards.
@@ -96,10 +84,8 @@ Features:
 - Invitations and Guest Management: Electronic invitations, RSVP tracking, and guest list management.
 - Notification System: In-app notifications for event updates and reminders.
 - Personalized Event Recommendations: Tailored suggestions based on user preferences and interests.
-- Calendar Integration: Synchronization with personal calendars for efficient schedule management.
-- Venue Database and Booking: Comprehensive database of venues with filters and booking functionality.
+- Calendar Integration: For efficient schedule management.
 - Weather Updates: Real-time weather information for event locations.
-- Interactive Event Timeline: A visual timeline for event planning and tracking progress.
 - Collaboration Tools: Features for multiple organizers to work together on a single event.
 
 Integration Points
@@ -112,18 +98,11 @@ Weather Services: To provide accurate weather forecasts for event days.
 - User Account Management 
    - Registration and login functionality
    - Profile creation and editing
-   - Password recovery
    - Event Creation and Management
    
 - Interface for creating new events
    - Options to edit and delete events
    - Calendar integration for event scheduling
-   - Venue Selection
-   
-- Database of venues with filters (location, capacity, etc.)
-   - Venue booking functionality
-   - Integration with maps for venue location
-   - Invitations and Guest Management
    
 - Sending electronic invitations
    - Tracking RSVPs
@@ -133,7 +112,6 @@ Weather Services: To provide accurate weather forecasts for event days.
    - Email and in-app notifications for event updates
    - Reminders for important dates and tasks
  
-User Account Management
 Registration and Login Functionality
 Given a user wants to access personalized features, when they visit the app, then they should be able to register or log in.
 Linked to User Story: "As a user, I want to set my personal preferences for events..."
@@ -152,10 +130,6 @@ Given a user wants to manage their schedule, when they create or RSVP to an even
 Linked to User Story: "As a user, I want to synchronize my personal calendar..."
 Sprint 1 Inclusion: No (Future Sprint)
 
-Integration with Maps for Venue Location
-Given a user views an event, when they look at event details, then they should see the venue location on a map.
-Sprint 1 Inclusion: No (Future Sprint)
-
 Invitations and Guest Management
 Given an organizer has created an event, when they want to invite guests, then they should be able to send electronic invitations.
 Linked to User Story: "As a user, I want to invite friends and colleagues..."
@@ -164,8 +138,8 @@ Sprint 1 Inclusion: Yes
 Tracking RSVPs
 Given an organizer has sent invitations, when guests respond, then the organizer should be able to track RSVPs.
 Sprint 1 Inclusion: Yes
-Managing Guest Lists
 
+Managing Guest Lists
 Given an organizer is managing their event, when they view the event details, then they should be able to see and manage the guest list.
 Sprint 1 Inclusion: Yes
 
