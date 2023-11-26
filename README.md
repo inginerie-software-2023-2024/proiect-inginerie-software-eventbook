@@ -113,40 +113,40 @@ Weather Services: To provide accurate weather forecasts for event days.
    - Reminders for important dates and tasks
  
 Registration and Login Functionality
-Given a user wants to access personalized features, when they visit the app, then they should be able to register or log in.
-Linked to User Story: "As a user, I want to set my personal preferences for events..."
-Sprint 1 Inclusion: Yes
+ -Given a user wants to access personalized features, when they visit the app, then they should be able to register or log in.
+ -Linked to User Story: "As a user, I want to set my personal preferences for events..."
+ -Sprint 1 Inclusion: Yes
 
 Profile Creation and Editing
-Given a user needs to update their information or preferences, when they access their account, then they should be able to edit their profile.
-Sprint 1 Inclusion: Yes
+ -Given a user needs to update their information or preferences, when they access their account, then they should be able to edit their profile.
+ -Sprint 1 Inclusion: Yes
 
 Given an organizer needs to change event details or cancel an event, when they access their event, then they should be able to edit or delete it.
-Linked to User Story: "As an event organizer, I want to easily create events..."
-Sprint 1 Inclusion: Yes
+ -Linked to User Story: "As an event organizer, I want to easily create events..."
+ -Sprint 1 Inclusion: Yes
 
 Calendar Integration for Event Scheduling
-Given a user wants to manage their schedule, when they create or RSVP to an event, then the event should be integrated into their personal calendar.
-Linked to User Story: "As a user, I want to synchronize my personal calendar..."
-Sprint 1 Inclusion: No (Future Sprint)
+ -Given a user wants to manage their schedule, when they create or RSVP to an event, then the event should be integrated into their personal calendar.
+ -Linked to User Story: "As a user, I want to synchronize my personal calendar..."
+ -Sprint 1 Inclusion: No (Future Sprint)
 
 Invitations and Guest Management
-Given an organizer has created an event, when they want to invite guests, then they should be able to send electronic invitations.
-Linked to User Story: "As a user, I want to invite friends and colleagues..."
-Sprint 1 Inclusion: Yes
+ -Given an organizer has created an event, when they want to invite guests, then they should be able to send electronic invitations.
+ -Linked to User Story: "As a user, I want to invite friends and colleagues..."
+ -Sprint 1 Inclusion: Yes
 
 Tracking RSVPs
-Given an organizer has sent invitations, when guests respond, then the organizer should be able to track RSVPs.
-Sprint 1 Inclusion: Yes
+ -Given an organizer has sent invitations, when guests respond, then the organizer should be able to track RSVPs.
+ -Sprint 1 Inclusion: Yes
 
 Managing Guest Lists
-Given an organizer is managing their event, when they view the event details, then they should be able to see and manage the guest list.
-Sprint 1 Inclusion: Yes
+ -Given an organizer is managing their event, when they view the event details, then they should be able to see and manage the guest list.
+ -Sprint 1 Inclusion: Yes
 
 Notification System
-Given there is an update or change in event details, when this occurs, then attendees should receive notifications.
-Linked to User Story: "As an event attendee, I want to receive weather updates..."
-Sprint 1 Inclusion: Yes
+ -Given there is an update or change in event details, when this occurs, then attendees should receive notifications.
+ -Linked to User Story: "As an event attendee, I want to receive weather updates..."
+ -Sprint 1 Inclusion: Yes
 
 #### Project Roadmap
    In order to outline the key stages and have a milestone planning a project roadmap
