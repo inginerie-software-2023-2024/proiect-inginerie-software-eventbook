@@ -1,1 +1,50 @@
-{"users": {}}
+{
+  "users":{
+    "1":{
+      "username":"string",
+      "email":"user@example.com",
+      "password":"$2b$12$MmWXFdVH001XgoNq3uRaoucRdP7jBNeUJW/0zo0wbrFxGhGuw9JvS",
+      "id":"0266473c-c99c-40be-aaff-6c7a056c1181",
+      "role":"user",
+      "event_participation":[ ],
+      "event_created":[
+        "93e2a14e-ebbf-46ee-915d-4834a7982d2a",
+        "75c6e74a-d1ca-43e5-8c17-87a7efe827a0",
+        "503a70da-9f15-4d49-878c-fd7320503275"
+      ],
+      "token_version":0
+    }
+  },
+  "events":{
+    "1":{
+      "id":"75c6e74a-d1ca-43e5-8c17-87a7efe827a0",
+      "title":"test",
+      "tags":[
+        "NETWORKING",
+        "OTHER",
+        "OUTDOORS"
+      ],
+      "description":"test",
+      "start_time":"2024-01-15 16:08:29.197996",
+      "end_time":"2024-01-15 16:08:29.197996",
+      "location":"test",
+      "organizer_id":"0266473c-c99c-40be-aaff-6c7a056c1181",
+      "organizer_name":"string"
+    },
+    "2":{
+      "id":"503a70da-9f15-4d49-878c-fd7320503275",
+      "title":"test",
+      "tags":[
+        "#networking",
+        "#other",
+        "#outdoors"
+      ],
+      "description":"test",
+      "start_time":"2024-01-15 16:08:29.197996",
+      "end_time":"2024-01-15 16:08:29.197996",
+      "location":"test",
+      "organizer_id":"0266473c-c99c-40be-aaff-6c7a056c1181",
+      "organizer_name":"string"
+    }
+  }
+}

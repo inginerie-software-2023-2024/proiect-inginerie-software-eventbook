@@ -9,5 +9,6 @@ class EventplannerBackendTags(Enum):
     AUTH: str = "Authentication"
     ACCOUNT: str = "Account"
     EVENT: str = "Event"
+    INVITATION: str = "Invitation"
     NOTIFICATION: str = "Notification"
     WEATHER: str = "Weather"

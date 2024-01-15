@@ -36,6 +36,6 @@ def authenticate_user(username: str, password: str):
 def get_current_active_admin(
         current_user: dict = Depends(auth_helper.get_current_user),
 ):
-    if current_user.role != Role.ADMIN:
+    if current_user['role'] != Role.ADMIN:
         raise HTTPException(status_code=403, detail="Insufficient permissions")
     return current_user
