@@ -1,0 +1,60 @@
+POST http://127.0.0.1:8080/users/register
+accept: application/json
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "email": "bob@example.com",
+  "password": "bob"
+}
+
+> {%
+client.global.set("id_bob", response.body.uid);
+
+%}
+
+###
+
+POST http://127.0.0.1:8080/users/register
+accept: application/json
+Content-Type: application/json
+
+{
+  "username": "mike",
+  "email": "mike@example.com",
+  "password": "mike"
+}
+
+> {%
+client.global.set("id_mike", response.body.uid);
+
+%}
+
+###
+POST http://127.0.0.1:8080/token
+Content-Type: application/x-www-form-urlencoded
+accept: application/json
+
+grant_type=&username=bob&password=bob&scope=&client_id=&client_secret=
+
+> {%
+client.global.set("access_token", response.body.access_token);
+
+%}
+###
+
+GET http://127.0.0.1:8080/users/me
+accept: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+
+###
+
+
+
+
+
+
+

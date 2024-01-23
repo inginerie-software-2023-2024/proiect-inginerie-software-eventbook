@@ -1,0 +1,36 @@
+import enum
+
+from pydantic import BaseModel
+
+
+class EventTags(enum.Enum):
+    ART = "#art"
+    BOOK_CLUB = "#bookclub"
+    BUSINESS = "#business"
+    CHARITY = "#charity"
+    CONCERT = "#concert"
+    CONFERENCE = "#conference"
+    CULTURE = "#culture"
+    EDUCATION = "#education"
+    FAMILY = "#family"
+    FASHION = "#fashion"
+    FESTIVAL = "#festival"
+    FITNESS = "#fitness"
+    FOOD = "#food"
+    GAMING = "#gaming"
+    HEALTH = "#health"
+    LECTURE = "#lecture"
+    MEETUP = "#meetup"
+    MOVIE = "#movie"
+    MUSIC = "#music"
+    NETWORKING = "#networking"
+    OTHER = "#other"
+    OUTDOORS = "#outdoors"
+    PARTY = "#party"
+    PHOTOGRAPHY = "#photography"
+    SCIENCE = "#science"
+    SPORTS = "#sports"
+    TECH = "#tech"
+    THEATRE = "#theatre"
+    TRAVEL = "#travel"
+    WORKSHOP = "#workshop"
