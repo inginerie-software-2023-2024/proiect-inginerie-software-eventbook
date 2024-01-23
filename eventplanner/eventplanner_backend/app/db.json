@@ -1,50 +1,58 @@
 {
-  "users":{
-    "1":{
-      "username":"string",
-      "email":"user@example.com",
-      "password":"$2b$12$MmWXFdVH001XgoNq3uRaoucRdP7jBNeUJW/0zo0wbrFxGhGuw9JvS",
-      "id":"0266473c-c99c-40be-aaff-6c7a056c1181",
-      "role":"user",
-      "event_participation":[ ],
-      "event_created":[
-        "93e2a14e-ebbf-46ee-915d-4834a7982d2a",
-        "75c6e74a-d1ca-43e5-8c17-87a7efe827a0",
-        "503a70da-9f15-4d49-878c-fd7320503275"
-      ],
-      "token_version":0
+  "users": {
+    "1": {
+      "username": "bob",
+      "email": "bob@example.com",
+      "password": "$2b$12$ORR7z0e7u3HS7S/znbi7ROu1AIf.qLKpm6jKNlqDfIk2tRxoKRAse",
+      "id": "f03a7ce9-91ef-446b-9297-39f9c4bf4d6b",
+      "role": "user",
+      "events_participation": null,
+      "events_created": "{TinySet}:gASVUwAAAAAAAACPlCiMJGI4Njg5MmNlLWFkMTMtNDlmZi1iODRiLTMxYmIzNTJiZjEwOJSMJDFhMWQ4NDc5LWJkYjQtNDBmYS05N2U1LTlhOGY5YmI5MGRhNJSQLg==",
+      "active_invitations": null,
+      "notifications": null,
+      "token_version": 0
+    },
+    "2": {
+      "username": "mike",
+      "email": "mike@example.com",
+      "password": "$2b$12$mrewCG0mRexwJUNx5wCNbO5U/9/77sjYWvmmN8pFOvvu9n1O.yQze",
+      "id": "9f14168c-f2ca-43cf-a3f2-91eb57244c08",
+      "role": "user",
+      "events_participation": null,
+      "events_created": "{TinySet}:gASVUwAAAAAAAACPlCiMJGI4Njg5MmNlLWFkMTMtNDlmZi1iODRiLTMxYmIzNTJiZjEwOJSMJDFhMWQ4NDc5LWJkYjQtNDBmYS05N2U1LTlhOGY5YmI5MGRhNJSQLg==",
+      "active_invitations": "{TinySet}:gASVqQIAAAAAAACPlCiMQmV2ZW50cGxhbm5lci5ldmVudHBsYW5uZXJfYmFja2VuZC5zY2hlbWFzLmV2ZW50cGxhbm5lcl9iYXNlX21vZGVsc5SMCkludml0YXRpb26Uk5QpgZR9lCiMCF9fZGljdF9flH2UKIwOdXNlcl90b19pbnZpdGWUjARtaWtllIwIZXZlbnRfaWSUjCQxYTFkODQ3OS1iZGI0LTQwZmEtOTdlNS05YThmOWJiOTBkYTSUjAJpZJSMQGQwYjU2MjgwOTg0N2MzMzY0ODI0MjFhOTRkYjZmYjZiYjlhOGVlOWM2ZDc1YWE3MDc4YjZlN2I0OTNiYjAzYTaUjAdpbnZpdGVylIwkZjAzYTdjZTktOTFlZi00NDZiLTkyOTctMzlmOWM0YmY0ZDZilIwEdGltZZSMEjE3MDU2NzYzMjAuOTMxNzcwOJR1jBJfX3B5ZGFudGljX2V4dHJhX1+UTowXX19weWRhbnRpY19maWVsZHNfc2V0X1+Uj5QoaAxoEGgOaApoCJCMFF9fcHlkYW50aWNfcHJpdmF0ZV9flE51YmgDKYGUfZQoaAZ9lCiMDnVzZXJfdG9faW52aXRllIwEbWlrZZSMCGV2ZW50X2lklIwkYjg2ODkyY2UtYWQxMy00OWZmLWI4NGItMzFiYjM1MmJmMTA4lIwCaWSUjEBkMjUwNmY2NDQ5ZmFkNTYwZDc2Zjg0M2M1ZDQ4Y2ExOTUxMjU5OWQ0YTllYzk3YmRhZTg0NzE0MmJlMjIxZGJhlIwHaW52aXRlcpSMJDlmMTQxNjhjLWYyY2EtNDNjZi1hM2YyLTkxZWI1NzI0NGMwOJSMBHRpbWWUjBExNzA1Njc2MzIxLjgyNTYxMZR1aBJOaBOPlChoHWghaB9oG2gZkGgVTnVikC4=",
+      "notifications": "{TinySet}:gASVrwEAAAAAAACPlCiMQmV2ZW50cGxhbm5lci5ldmVudHBsYW5uZXJfYmFja2VuZC5zY2hlbWFzLmV2ZW50cGxhbm5lcl9iYXNlX21vZGVsc5SMDE5vdGlmaWNhdGlvbpSTlCmBlH2UKIwIX19kaWN0X1+UfZQojAd1c2VyX2lklIwkOWYxNDE2OGMtZjJjYS00M2NmLWEzZjItOTFlYjU3MjQ0YzA4lIwRbm90aWZpY2F0aW9uX3R5cGWUaAGMEE5vdGlmaWNhdGlvblR5cGWUk5SMDGV2ZW50X3VwZGF0ZZSFlFKUjAdtZXNzYWdllIwLIkZhc2Zhc2ZhcyKUjAJpZJSMQDM1NDBlZjA1NTE5N2FlMjRmMDgzNDExODc3ZjY3YTQxMmRhNDg2MTRjNTlkOTgwMmFjYTc5NDMyM2EwMWI5YTSUjAR0aW1llEdB2Wqjs3F5BowEcmVhZJSJdYwSX19weWRhbnRpY19leHRyYV9flE6MF19fcHlkYW50aWNfZmllbGRzX3NldF9flI+UKGgSaBRoCGgKaBCQjBRfX3B5ZGFudGljX3ByaXZhdGVfX5ROdWKQLg==",
+      "token_version": 0
     }
   },
-  "events":{
-    "1":{
-      "id":"75c6e74a-d1ca-43e5-8c17-87a7efe827a0",
-      "title":"test",
-      "tags":[
-        "NETWORKING",
-        "OTHER",
-        "OUTDOORS"
-      ],
-      "description":"test",
-      "start_time":"2024-01-15 16:08:29.197996",
-      "end_time":"2024-01-15 16:08:29.197996",
-      "location":"test",
-      "organizer_id":"0266473c-c99c-40be-aaff-6c7a056c1181",
-      "organizer_name":"string"
+  "events": {
+    "1": {
+      "title": "test_mike",
+      "tags": "{TinySet}:gASVPgAAAAAAAACPlCiMCCNsZWN0dXJllIwHI3RyYXZlbJSMCCNmaXRuZXNzlIwMI3Bob3RvZ3JhcGh5lIwHI2dhbWluZ5SQLg==",
+      "description": "test",
+      "start_time": 1705491930.0598893,
+      "end_time": 1705491930.0598893,
+      "location": "test",
+      "public": false,
+      "id": "b86892ce-ad13-49ff-b84b-31bb352bf108",
+      "organizer_name": "mike",
+      "organizer_id": "9f14168c-f2ca-43cf-a3f2-91eb57244c08",
+      "admins": "{TinySet}:gASVLAAAAAAAAACPlCiMJDlmMTQxNjhjLWYyY2EtNDNjZi1hM2YyLTkxZWI1NzI0NGMwOJSQLg==",
+      "participants": null
     },
-    "2":{
-      "id":"503a70da-9f15-4d49-878c-fd7320503275",
-      "title":"test",
-      "tags":[
-        "#networking",
-        "#other",
-        "#outdoors"
-      ],
-      "description":"test",
-      "start_time":"2024-01-15 16:08:29.197996",
-      "end_time":"2024-01-15 16:08:29.197996",
-      "location":"test",
-      "organizer_id":"0266473c-c99c-40be-aaff-6c7a056c1181",
-      "organizer_name":"string"
+    "2": {
+      "title": "test_bob",
+      "tags": "{TinySet}:gASVPgAAAAAAAACPlCiMCCNsZWN0dXJllIwHI3RyYXZlbJSMCCNmaXRuZXNzlIwMI3Bob3RvZ3JhcGh5lIwHI2dhbWluZ5SQLg==",
+      "description": "test",
+      "start_time": 1705491930.0598893,
+      "end_time": 1705491930.0598893,
+      "location": "test",
+      "public": false,
+      "id": "1a1d8479-bdb4-40fa-97e5-9a8f9bb90da4",
+      "organizer_name": "bob",
+      "organizer_id": "f03a7ce9-91ef-446b-9297-39f9c4bf4d6b",
+      "admins": "{TinySet}:gASVLAAAAAAAAACPlCiMJGYwM2E3Y2U5LTkxZWYtNDQ2Yi05Mjk3LTM5ZjljNGJmNGQ2YpSQLg==",
+      "participants": null
     }
   }
 }

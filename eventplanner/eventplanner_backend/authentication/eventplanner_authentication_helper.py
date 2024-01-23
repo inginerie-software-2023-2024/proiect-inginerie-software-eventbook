@@ -12,8 +12,12 @@ from fastapi.security import OAuth2PasswordBearer
 from eventplanner.eventplanner_backend.eventplanner_database import (
     users_table,
     user_query,
+    SetSerializer
 )
-from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import User, UserBase
+from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
+    User,
+    UserBase,
+)
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -25,13 +29,26 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None, version: int= 0) -> str:
+def create_access_token(
+    data: User, expires_delta: timedelta | None = None, version: int = 0
+) -> str:
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=30)
+        expire = datetime.utcnow() + timedelta(hours=24)
+
+    # [SET_TYPE]
+    to_encode.events_created = SetSerializer().encode(to_encode.events_created)
+    to_encode.active_invitations = SetSerializer().encode(to_encode.active_invitations)
+    to_encode.events_participation = SetSerializer().encode(to_encode.events_participation)
+    to_encode.notifications = SetSerializer().encode(to_encode.notifications)
+
+
+    to_encode = dict(to_encode)
     to_encode.update({"exp": expire, "ver": version})
+
+
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -66,7 +83,7 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)])-> dict:
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -86,4 +103,4 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)])-> dict
         raise credentials_exception
     if user["token_version"] != token_version:
         raise credentials_exception
-    return user
+    return User(**user)
