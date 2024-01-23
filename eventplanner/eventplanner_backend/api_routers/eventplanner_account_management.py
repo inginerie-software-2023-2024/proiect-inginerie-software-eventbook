@@ -59,6 +59,13 @@ def register_user(input_user: UserBase):
     return {"message": "User created successfully",
             "uid": uid}
 
+@account_management_router.get("/users/friends/add", tags=[Tags.ACCOUNT])
+def add_friend_user():
+    pass
+
+@account_management_router.get("/users/friends/remove", tags=[Tags.ACCOUNT])
+def remove_friend_user():
+    pass
 
 @account_management_router.get("/users/{username}", tags=[Tags.ACCOUNT])
 def get_user(username: str):
