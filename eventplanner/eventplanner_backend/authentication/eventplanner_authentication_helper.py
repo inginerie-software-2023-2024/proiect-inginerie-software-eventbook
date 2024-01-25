@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Annotated
 from datetime import datetime, timedelta
 
@@ -12,7 +13,7 @@ from fastapi.security import OAuth2PasswordBearer
 from eventplanner.eventplanner_backend.eventplanner_database import (
     users_table,
     user_query,
-    SetSerializer
+    SetSerializer,
 )
 from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
     User,
@@ -32,7 +33,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 def create_access_token(
     data: User, expires_delta: timedelta | None = None, version: int = 0
 ) -> str:
-    to_encode = data.copy()
+    to_encode = data.model_copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -41,13 +42,14 @@ def create_access_token(
     # [SET_TYPE]
     to_encode.events_created = SetSerializer().encode(to_encode.events_created)
     to_encode.active_invitations = SetSerializer().encode(to_encode.active_invitations)
-    to_encode.events_participation = SetSerializer().encode(to_encode.events_participation)
+    to_encode.events_participation = SetSerializer().encode(
+        to_encode.events_participation
+    )
     to_encode.notifications = SetSerializer().encode(to_encode.notifications)
-
+    to_encode.friends = SetSerializer().encode(to_encode.friends)
 
     to_encode = dict(to_encode)
     to_encode.update({"exp": expire, "ver": version})
-
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -66,7 +68,8 @@ def decode_token(token: str):
         username: str = payload.get("username")
         if username is None:
             raise HTTPException(
-                status_code=401, detail="Invalid authentication credentials"
+                status_code=HTTPStatus.UNAUTHORIZED,
+                detail="Invalid authentication credentials",
             )
         return username
     except jwt.PyJWTError:

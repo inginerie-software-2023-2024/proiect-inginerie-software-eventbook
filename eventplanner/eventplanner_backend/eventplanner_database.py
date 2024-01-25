@@ -6,11 +6,7 @@ from tinydb.storages import JSONStorage
 from tinydb_serialization import SerializationMiddleware
 
 
-
-
-TYPES = {
-    "<class 'str'>": str
-}
+TYPES = {"<class 'str'>": str}
 # class SetSerializer(Serializer):
 #     OBJ_CLASS = set  # The class this serializer handles
 #
@@ -24,7 +20,6 @@ TYPES = {
 #     def decode(self, s):
 #         str_type, s = s.split('#%#')
 #         return set(map(TYPES[str_type], s.split(",")))
-
 
 
 class SetSerializer:
@@ -52,4 +47,3 @@ invitation_table = db.table("invitations")
 user_query = Query()
 events_query = Query()
 invitations_query = Query()
-

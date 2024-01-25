@@ -1,0 +1,15 @@
+FROM python:3.11.7-slim-bullseye
+
+WORKDIR /eventplanner
+
+# Copy the 'eventplanner' directory from your project into the working directory in the container
+COPY ./eventplanner .
+
+# Install dependencies
+RUN pip install -r ./eventplanner_backend/app/requirements.txt
+
+# Expose port 8000
+EXPOSE 8000
+
+# Run the application
+CMD ["python", "./eventplanner_backend/app/eventplanner_main.py"]

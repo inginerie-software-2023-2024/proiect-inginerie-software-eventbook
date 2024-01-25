@@ -209,7 +209,7 @@ application through various stages of interaction to the final goal achievement.
 
 To effectively design and develop the Event Management Application, it's crucial to have a clear understanding
 of the typical users. Below is a detailed user persona that represents a segment of the
-application's target audience:
+application's start_user audience:
 
 Persona: Emily Nguyen
 
