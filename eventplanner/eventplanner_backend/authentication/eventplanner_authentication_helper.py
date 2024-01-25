@@ -12,7 +12,7 @@ from fastapi.security import OAuth2PasswordBearer
 from eventplanner.eventplanner_backend.eventplanner_database import (
     users_table,
     user_query,
-    SetSerializer
+    SetSerializer,
 )
 from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
     User,
@@ -43,11 +43,10 @@ def create_access_token(
     to_encode.active_invitations = SetSerializer().encode(to_encode.active_invitations)
     to_encode.events_participation = SetSerializer().encode(to_encode.events_participation)
     to_encode.notifications = SetSerializer().encode(to_encode.notifications)
-
+    to_encode.friends = SetSerializer().encode(to_encode.friends)
 
     to_encode = dict(to_encode)
     to_encode.update({"exp": expire, "ver": version})
-
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt

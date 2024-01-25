@@ -33,7 +33,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-def authenticate_user(username: str, password: str)-> User| None:
+def authenticate_user(username: str, password: str) -> User | None:
     users = users_table.search(user_query.username == username)
     if users:
         user = users[0]  # Assuming username is unique

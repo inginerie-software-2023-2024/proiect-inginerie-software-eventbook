@@ -1,11 +1,9 @@
 import time
-from typing import List, Annotated, Dict
+from datetime import datetime
+from typing import List, Annotated
 from uuid import uuid4
 from http import HTTPStatus
-from datetime import datetime
-
-from fastapi import APIRouter, Depends, Body, Query
-from fastapi.exceptions import HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from eventplanner.eventplanner_backend.api_routers import shared_functions
 from eventplanner.common.eventplanner_common import EventplannerBackendTags as Tags
@@ -22,74 +20,101 @@ from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
     User,
     EventBase,
     Event,
+    Invitation, InvitationType
 )
 from eventplanner.eventplanner_backend.schemas.eventplanner_model_helpers import (
     EventTags,
+)
+from eventplanner.eventplanner_backend.api_routers import (
+    eventplanner_weather_integration as weather_integration,
 )
 
 event_management_router = APIRouter()
 
 
+# Helper Functions
+def generate_unique_event_id():
+    event_id = uuid4()
+    while event_table.search(events_query.id == event_id):
+        event_id = uuid4()
+    return str(event_id)
+
+
+def update_user_events_created(user: User, event_id: str):
+    updated_events_created = (user.events_created or set()) | {event_id}
+    users_table.update(
+        {"events_created": updated_events_created}, user_query.id == user.id
+    )
+
+
+def validate_event_ownership_or_admin(event: Event, user: User):
+    if user.id not in event.admins and user.id != event.organizer_id:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="You do not have permission to perform this action",
+        )
+
+
+# Event Management Endpoints
 @event_management_router.post("/events/register", tags=[Tags.EVENT])
 def register_event(
         title: str,
         description: str,
         location: str,
-        tags: Annotated[List[EventTags], Query()],
+        tags: List[EventTags] = Query([]),
         start_time: float = time.time(),
         end_time: float = time.time(),
         current_user: User = Depends(auth_helper.get_current_user),
-        public: bool = False
+        public: bool = False,
 ):
-    id_event = uuid4()
-    while event_table.search(events_query.id == id_event):
-        id_event = uuid4()
+    id_event = generate_unique_event_id()
 
-    id_event = str(id_event)
+    event_to_store = Event(
+        id=id_event,
+        title=title,
+        tags=set(tag.value for tag in tags),
+        description=description,
+        start_time=start_time,
+        end_time=end_time,
+        location=location,
+        organizer_id=current_user.id,
+        admins={current_user.id},
+        organizer_name=current_user.username,
+        public=public,
+    )
 
-    event_to_store = {
-        "id": id_event,
-        "title": title,
-        "tags": {tag.value for tag in tags},
-        "description": description,
-        "start_time": start_time,
-        "end_time": end_time,
-        "location": location,
-        "organizer_id": current_user.id,
-        "admins": {current_user.id},
-        "organizer_name": current_user.username,
-        "participants": None,
-        "public": public
-    }
-    event_to_store = Event(**event_to_store)
-    event_table.insert(dict(event_to_store))
+    event_table.insert(event_to_store.model_dump())
+    update_user_events_created(current_user, id_event)
 
-    users_table.update({"events_created": (current_user.events_created or set()) | {id_event}})
-    return {"message": "Event created successfully",
-            "id_event": id_event}
+    return {"message": "Event created successfully", "id_event": id_event}
 
 
-@event_management_router.get(
-    "/events/{event_title}", tags=[Tags.EVENT], response_model=list[Event]
-)
-def get_single_event(event_title: str):
-    event = event_table.search(events_query.title == event_title)
+@event_management_router.get("/events/{event_id}", tags=[Tags.EVENT])
+def get_single_event(event_id: str, current_user: User = Depends(auth_helper.get_current_user)):
+    event = shared_functions.get_event_by_id(event_id=event_id)
 
-    if not event:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Event not found")
+    if not event.public and not current_user.id in (event.participants or set()) | (event.admins or set()):
+        return Event(title=event.title, id=event.id, description=event.description, public=event.public)
 
-    return event
+    latitude, longitude = shared_functions.get_location_coordinates(event.location)
+    if latitude is not None and longitude is not None:
+        weather = weather_integration.fetch_and_create_weather_data(latitude, longitude)
+
+        event.weather = weather
+
+        return event
+    raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Location not found")
 
 
-@event_management_router.get("/events", tags=[Tags.EVENT], response_model=list[Event])
+@event_management_router.get("/events", tags=[Tags.EVENT], response_model=List[Event])
 def get_events(
         title: str = None,
         location: str = None,
-        tags: str = None,
-        organizer_name: int = None,
+        tags: List[EventTags] = Query([]),
+        organizer_name: str = None,
         start_date: float = None,
         end_date: float = None,
-        public: bool = None
+        public: bool = None,
 ):
     conditions = []
 
@@ -102,104 +127,115 @@ def get_events(
     if start_date:
         conditions.append(events_query.start_date >= start_date)
     if tags:
-        conditions.append(events_query.tags == tags)
+        conditions.append(events_query.tags.any(tag.value for tag in tags))
     if end_date:
         conditions.append(events_query.end_date <= end_date)
-    if public:
+    if public is not None:
         conditions.append(events_query.public == public)
 
     if conditions:
-        results = event_table.search(conditions[0])
+        # Combine all conditions using logical AND
+        query = conditions[0]
         for condition in conditions[1:]:
-            results = [event for event in results if condition(event)]
-    else:
-        results = event_table.all()
+            query &= condition
 
-    return results
+        events = event_table.search(query)
+    else:
+        events = event_table.all()
+
+    return events
 
 
 @event_management_router.post("/events/{event_id}/status", tags=[Tags.EVENT])
 def change_event_status(
         public: bool,
         event_id: str,
-        current_user: User = Depends(auth_helper.get_current_user)
+        current_user: User = Depends(auth_helper.get_current_user),
 ):
     event = shared_functions.get_event_by_id(event_id)
-    if current_user.id in event.admins or current_user.id == event.organizer_id:
-        event_table.update(
-            {"public": public},
-            events_query.id == event.id
-        )
+    validate_event_ownership_or_admin(event, current_user)
+    event_table.update({"public": public}, events_query.id == event.id)
+    return {"message": "Status updated successfully"}
 
-        return {"message": "Status updated successfully"}
 
-    raise HTTPException(
-        status_code=HTTPStatus.BAD_REQUEST,
-        detail="You do not have permission to change the status"
-    )
+# Other endpoints (join_public_event, leave_event, add_admin_event, etc.) follow similar refactoring approach...
 
 
 @event_management_router.get("/events/{event_id}/join", tags=[Tags.EVENT])
-def join_public_event(event_id: str, current_user: User = Depends(auth_helper.get_current_user)):
+def join_event(
+        event_id: str, current_user: User = Depends(auth_helper.get_current_user)
+):
     event = shared_functions.get_event_by_id(event_id)
-
     if event.public:
+        updated_participants = (event.participants or set()) | {current_user.id}
         event_table.update(
-            {"participants": event.participants | {current_user.id}},
-            events_query.id == event_id
+            {"participants": updated_participants}, events_query.id == event_id
+        )
+        return {"message": "Successfully joined the event"}
+    else:
+        # Check if the user has already requested to join
+        existing_request = any(
+            inv for inv in (event.requests_to_join or set())
+            if inv.end_user == current_user.id
+        )
+        if existing_request:
+            return {"message": "You have already requested to join this event"}
+
+        inv_id = shared_functions.generate_invitation_id_fields(event_id, current_user.id)
+
+        # Create a new invitation as a join request
+        new_request = Invitation(
+            start_user=current_user.id,  # Assuming the organizer handles requests
+            type=InvitationType.REQUEST,
+            event_id=event_id,
+            id=inv_id,
+            time=str(datetime.now())
         )
 
-        return {"message": "Successfully joined the event"}
-
-    raise HTTPException(
-        status_code=HTTPStatus.BAD_REQUEST,
-        detail="Event is not public"
-    )
+        updated_requests = (event.requests_to_join or set()) | {new_request}
+        event_table.update(
+            {"requests_to_join": updated_requests}, events_query.id == event_id
+        )
+        return {"message": "Request to join the event sent successfully",
+                "id_invitation": inv_id}
 
 
 @event_management_router.delete("/events/{event_id}/leave", tags=[Tags.EVENT])
-def leave_event(event_id: str, current_user: User = Depends(auth_helper.get_current_user)):
+def leave_event(
+        event_id: str, current_user: User = Depends(auth_helper.get_current_user)
+):
     event = shared_functions.get_event_by_id(event_id)
 
     if current_user.id in event.participants:
+        updated_participants = event.participants - {current_user.id}
         event_table.update(
-            {"participants": event.participants ^ current_user.id},
-            events_query.id == event_id
+            {"participants": updated_participants}, events_query.id == event_id
         )
         return {"message": "You successfully left the event"}
 
     if current_user.id in event.admins:
-        event_table.update(
-            {"admins": event.admins ^ current_user.id},
-            events_query.id == event_id
-        )
+        updated_admins = event.admins - {current_user.id}
+        event_table.update({"admins": updated_admins}, events_query.id == event_id)
         return {"message": "You successfully left the event"}
 
     raise HTTPException(
         status_code=HTTPStatus.BAD_REQUEST,
-        detail="Bad request!"
+        detail="You are not a participant or admin of this event",
     )
 
 
 @event_management_router.put("/events/{event_id}/admin", tags=[Tags.EVENT])
 def add_admin_event(
         event_id: str,
-        username: Annotated[str, Body(embed=True)],
-        current_user: User = Depends(auth_helper.get_current_user)
-) -> Dict:
+        username: str,
+        current_user: User = Depends(auth_helper.get_current_user),
+):
     current_event = shared_functions.get_event_by_id(event_id)
+    validate_event_ownership_or_admin(current_event, current_user)
 
-    if not current_user.id in current_event.admins:
-        raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail="You do not have rights to add an admin to this event",
-        )
-
-    user = shared_functions.get_user_by_name(username)
-
-    event_table.update(
-        {"admins": current_event.admins | {user.id}}, events_query["id"] == event_id
-    )
+    user_to_add = shared_functions.get_user_by_name(username)
+    updated_admins = current_event.admins | {user_to_add.id}
+    event_table.update({"admins": updated_admins}, events_query.id == event_id)
 
     return {"message": "Admin added successfully to event"}
 
@@ -207,98 +243,102 @@ def add_admin_event(
 @event_management_router.put("/events/{event_id}/ownership", tags=[Tags.EVENT])
 def change_ownership_event(
         event_id: str,
-        username: Annotated[str, Body(embed=True)],
-        current_user: User = Depends(auth_helper.get_current_user)
-) -> Dict:
+        username: str,
+        current_user: User = Depends(auth_helper.get_current_user),
+):
     current_event = shared_functions.get_event_by_id(event_id)
-
     if current_user.id != current_event.organizer_id:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail="You do not have rights to change ownership to this event",
+            detail="You do not have rights to change ownership of this event",
         )
 
-    user = shared_functions.get_user_by_name(username)
-
+    new_organizer = shared_functions.get_user_by_name(username)
     event_table.update(
-        {
-            "organizer_id": user.id,
-            "organizer_name": user.username
-        },
-        events_query["id"] == event_id
+        {"organizer_id": new_organizer.id, "organizer_name": new_organizer.username},
+        events_query.id == event_id,
     )
 
     return {"message": "Ownership successfully changed"}
 
 
 @event_management_router.get("/events/{event_id}/participants", tags=[Tags.EVENT])
-def get_participants_event(event_id: str):
+def get_participants_event(event_id: str, current_user: User = Depends(auth_helper.get_current_user)):
     event = shared_functions.get_event_by_id(event_id)
-
-    if not event.public:
+    if not event.public and current_user.id not in (event.participants or set()) | {event.organizer_id} | (
+            event.admins or set()):
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail="This event is private"
+            status_code=HTTPStatus.FORBIDDEN,
+            detail="You do not have access to the participants of this private event"
         )
-
-    return event.participants
+    return list(event.participants or [])
 
 
 @event_management_router.put("/events/{event_id}", tags=[Tags.EVENT])
 def update_event(
-        updated_event: EventBase,
         event_id: str,
+        updated_event: EventBase,
         current_user: User = Depends(auth_helper.get_current_user),
 ):
     event = shared_functions.get_event_by_id(event_id)
+    validate_event_ownership_or_admin(event, current_user)
 
-    updated_event.start_time = str(updated_event.start_time)
-    updated_event.end_time = str(updated_event.end_time)
-
-    if current_user.id in event.admins:
-        event_table.update(dict(updated_event), events_query.id == event.id)
-
-        return {"message": "Event updated successfully!"}
-
-    raise HTTPException(
-        status_code=HTTPStatus.BAD_REQUEST,
-        detail="You do not have rights to edit this event",
+    event_table.update(
+        updated_event.dict(exclude_unset=True), events_query.id == event_id
     )
+    return {"message": "Event updated successfully!"}
 
 
 @event_management_router.delete("/events/{event_id}/admin", tags=[Tags.EVENT])
 def remove_admin_status_event(
-        event_id: str, admin_id: Annotated[str, Body(embed=True)], current_user=Depends(auth_helper.get_current_user)
+        event_id: str,
+        admin_id: str,
+        current_user: User = Depends(auth_helper.get_current_user),
 ):
     event = shared_functions.get_event_by_id(event_id)
-
-    if event.organizer_id == current_user.id:
-        event_table.update(
-            {"admins": event.admins ^ {admin_id}}, events_query.id == event_id
+    if event.organizer_id != current_user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="You do not have rights to remove an admin from this event",
         )
 
-        return {"message": "Admin removed successfully!"}
+    updated_admins = event.admins - {admin_id}
+    event_table.update({"admins": updated_admins}, events_query.id == event_id)
+    return {"message": "Admin removed successfully!"}
 
 
-@event_management_router.delete(
-    "/events/{invitation_id}/guests/{guest_id}", tags=[Tags.EVENT]
-)
-def remove_guest_from_event():
-    pass
-
-
-@event_management_router.delete("/events", tags=[Tags.EVENT])
+@event_management_router.delete("/events/{event_id}", tags=[Tags.EVENT])
 def delete_event(
         event_id: str, current_user: User = Depends(auth_helper.get_current_user)
 ):
     event = shared_functions.get_event_by_id(event_id)
+    if event.organizer_id != current_user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="You do not have rights to delete this event",
+        )
 
-    if event.organizer_id == current_user.id:
-        event_table.remove(events_query.id == event_id)
+    event_table.remove(events_query.id == event_id)
+    return {"message": "Event deleted successfully!"}
 
-        return {"message": "Event deleted successfully!"}
 
-    raise HTTPException(
-        status_code=HTTPStatus.BAD_REQUEST,
-        detail="You do not have rights to edit this event",
+@event_management_router.post("/events/{event_id}/approve_request", tags=[Tags.EVENT])
+def approve_join_request(
+        event_id: str, invitation_id: str, current_user: User = Depends(auth_helper.get_current_user)
+):
+    event = shared_functions.get_event_by_id(event_id)
+    validate_event_ownership_or_admin(event, current_user)
+
+    invitation = [req for req in event.requests_to_join if req.id == invitation_id]
+
+    if not invitation or invitation[0].type != InvitationType.REQUEST:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Invitation not found")
+
+    invitation = invitation[0]
+
+    updated_participants = (event.participants or set()) | {invitation.end_user}
+    event_table.update(
+        {"participants": updated_participants}, events_query.id == event_id
     )
+
+    return {"message": "Join request approved"}
