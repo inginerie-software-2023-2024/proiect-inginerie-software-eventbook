@@ -22,6 +22,8 @@ from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
 )
 
 invitation_management_router = APIRouter()
+
+
 # Helper functions
 def validate_event_organizer_or_admin(event_id: str, user_id: str):
     event = shared_functions.get_event_by_id(event_id)

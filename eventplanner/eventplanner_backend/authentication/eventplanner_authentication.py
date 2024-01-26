@@ -1,5 +1,7 @@
-from uuid import uuid4
-from http import HTTPStatus
+"""
+Module for authentication related endpoints
+"""
+
 
 from fastapi import APIRouter
 from fastapi import HTTPException, Depends
@@ -16,7 +18,6 @@ from eventplanner.common.eventplanner_common import EventplannerBackendTags as T
 from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
     User,
     Role,
-    UserBase,
 )
 
 auth_router = APIRouter()

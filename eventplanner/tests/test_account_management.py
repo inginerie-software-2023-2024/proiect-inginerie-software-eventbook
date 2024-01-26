@@ -20,7 +20,7 @@ from eventplanner.eventplanner_backend.app.eventplanner_main import app
 from eventplanner.eventplanner_backend.eventplanner_database import (
     users_table,
     event_table,
-user_query
+    user_query,
 )
 
 
@@ -44,6 +44,7 @@ def test_unique_username_and_email_success():
     finally:
         users_table.truncate()
         event_table.truncate()
+
 
 #
 # def test_add_friend_success():
@@ -145,11 +146,16 @@ def test_remove_friend_successfully():
 
         # Add a friend
         user1 = users_table.search(user_query.id == user1_id)[0]
-        users_table.update({"friends": (user1["friends"] or [])+[(user2_id)]}, user_query.id == user1_id)
+        users_table.update(
+            {"friends": (user1["friends"] or []) + [(user2_id)]},
+            user_query.id == user1_id,
+        )
 
         user2 = users_table.search(user_query.id == user2_id)[0]
-        users_table.update({"friends": (user2["friends"] or [])+[(user1_id)]}, user_query.id == user2_id)
-
+        users_table.update(
+            {"friends": (user2["friends"] or []) + [(user1_id)]},
+            user_query.id == user2_id,
+        )
 
         # Remove the friend
         response = client.post(

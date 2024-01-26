@@ -1,12 +1,16 @@
+"""
+Helper module for eventplanner_authentication
+"""
+
 from http import HTTPStatus
 from typing import Annotated
 from datetime import datetime, timedelta
 
 import jwt
 
-from fastapi import Depends
 from starlette import status
 from passlib.context import CryptContext
+from fastapi import Depends
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
@@ -17,7 +21,6 @@ from eventplanner.eventplanner_backend.eventplanner_database import (
 )
 from eventplanner.eventplanner_backend.schemas.eventplanner_base_models import (
     User,
-    UserBase,
 )
 
 

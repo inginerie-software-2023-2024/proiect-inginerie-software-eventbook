@@ -1,9 +1,14 @@
+"""
+Helper module for eventplanner
+"""
 import enum
-
-from pydantic import BaseModel
 
 
 class EventTags(enum.Enum):
+    """
+    Tags for event
+    """
+
     ART = "#art"
     BOOK_CLUB = "#bookclub"
     BUSINESS = "#business"

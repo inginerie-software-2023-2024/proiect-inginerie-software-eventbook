@@ -1,18 +1,20 @@
+"""
+Module for providing models for interacting with database
+"""
 import enum
-import time
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Set, List
 
-import pydantic
-from pydantic import BaseModel, field_serializer
 
-from eventplanner.eventplanner_backend.schemas.eventplanner_model_helpers import (
-    EventTags,
-)
+from pydantic import BaseModel, field_serializer
 
 
 class SetSerializer:
+    """
+    Serializer class for sets
+    """
+
     @staticmethod
     def serialize(value: Set) -> list:
         return list(value)
@@ -23,6 +25,10 @@ class SetSerializer:
 
 
 class TimeInterval(enum.Enum):
+    """
+    Enum class for timeinterval options
+    """
+
     DAY_1 = "1"
     DAY_3 = "3"
     DAY_7 = "7"
@@ -31,17 +37,29 @@ class TimeInterval(enum.Enum):
 
 
 class Role(str, Enum):
+    """
+    Enum class for role types
+    """
+
     ADMIN = "admin"
     USER = "user"
 
 
 class InvitationType(enum.Enum):
+    """
+    Enum class for types of invitation
+    """
+
     EVENT = "event"
     FRIEND = "friend"
     REQUEST = "request"
 
 
 class InvitationBase(BaseModel):
+    """
+    Pydantic base model for invitation object
+    """
+
     end_user: str | None = None
     start_user: str | None = None
     type: InvitationType
@@ -49,6 +67,10 @@ class InvitationBase(BaseModel):
 
 
 class Invitation(InvitationBase):
+    """
+    Pydantic model for Invitation object
+    """
+
     id: str
     time: str
 
@@ -57,12 +79,20 @@ class Invitation(InvitationBase):
 
 
 class NotificationType(str, Enum):
+    """
+    Enum class for types of notification
+    """
+
     INVITATION = "invitation"
     EVENT_UPDATE = "event_update"
     SYSTEM = "system"
 
 
 class Notification(BaseModel):
+    """
+    Pydantic model for notification object
+    """
+
     user_id: str
     notification_type: NotificationType
     message: str
@@ -75,12 +105,20 @@ class Notification(BaseModel):
 
 
 class UserBase(BaseModel):
+    """
+    Pydantic model for userbase info
+    """
+
     username: str
     email: str
     password: str
 
 
 class User(UserBase):
+    """
+    Pydantic model for user object
+    """
+
     id: str
     role: Role = Role.USER
     events_participation: Set[str] | None = None
@@ -105,6 +143,10 @@ class User(UserBase):
 
 
 class HourlyWeatherData(BaseModel):
+    """
+    Pydantic model for hourly weather data
+    """
+
     time: datetime
     temperature_2m: float
     relative_humidity_2m: float
@@ -121,15 +163,27 @@ class HourlyWeatherData(BaseModel):
 
 
 class DailyWeatherData(BaseModel):
+    """
+    Pydantic model for daily weather data
+    """
+
     date: datetime
     hourly_data: List[HourlyWeatherData]
 
 
 class Weather(BaseModel):
+    """
+    Pydantic model for weather
+    """
+
     hourly_data: List[HourlyWeatherData]
 
 
 class EventBase(BaseModel):
+    """
+    Pydantic base model for event class
+    """
+
     title: str
     tags: Set[str] | None = None
     description: str | None = None
@@ -140,6 +194,10 @@ class EventBase(BaseModel):
 
 
 class Event(EventBase):
+    """
+    Pydantic model for event class
+    """
+
     id: str
     organizer_name: str | None = None
     organizer_id: str | None = None

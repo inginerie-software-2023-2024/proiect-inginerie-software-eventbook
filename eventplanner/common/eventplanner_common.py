@@ -1,3 +1,6 @@
+"""
+Module centered around config vars
+"""
 from enum import Enum
 
 EVENTPLANNER_BACKEND_PORT = 8080
@@ -6,6 +9,10 @@ EVENTPLANNER_BACKEND_APP = "eventplanner_main:app"
 
 
 class EventplannerBackendTags(Enum):
+    """
+    Tags for openapi interface
+    """
+
     AUTH: str = "Authentication"
     ACCOUNT: str = "Account"
     EVENT: str = "Event"

@@ -1,5 +1,8 @@
-from collections import defaultdict
-from datetime import datetime, timedelta
+"""
+Module for providing a wrapper for interaction with weather endpoint
+"""
+
+from datetime import datetime
 
 import requests
 from fastapi import APIRouter

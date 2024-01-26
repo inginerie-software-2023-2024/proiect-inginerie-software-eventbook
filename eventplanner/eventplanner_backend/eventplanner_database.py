@@ -1,3 +1,6 @@
+"""
+Module for initializing database interactions
+"""
 import base64
 import pickle
 

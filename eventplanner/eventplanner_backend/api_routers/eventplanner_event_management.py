@@ -1,8 +1,8 @@
 import time
-from datetime import datetime
-from typing import List, Annotated
 from uuid import uuid4
+from typing import List
 from http import HTTPStatus
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from eventplanner.eventplanner_backend.api_routers import shared_functions
@@ -136,120 +136,120 @@ def get_single_event(
     event_id: str, current_user: User = Depends(auth_helper.get_current_user)
 ):
     """
-    Endpoint utility for retrieving a single event by its ID.
-    ```
-    Args:
-        event_id: The unique identifier of the event
-        current_user: Current logged-in user (retrieved via authentication)
+        Endpoint utility for retrieving a single event by its ID.
+        ```
+        Args:
+            event_id: The unique identifier of the event
+            current_user: Current logged-in user (retrieved via authentication)
 
-    Returns:
-        Event object with details if the user is authorized to view it
+        Returns:
+            Event object with details if the user is authorized to view it
 
-    Raises:
-        [401]UNAUTHORIZED: Invalid credentials or not logged in
-        [404]NOT_FOUND: Event not found or location not found for weather data
-        [403]FORBIDDEN: User not authorized to view the event
-    ```
-    Examples of valid request body:
-    ```
-    event_id: 111-11111111-111111-11
-    ```
+        Raises:
+            [401]UNAUTHORIZED: Invalid credentials or not logged in
+            [404]NOT_FOUND: Event not found or location not found for weather data
+            [403]FORBIDDEN: User not authorized to view the event
+        ```
+        Examples of valid request body:
+        ```
+        event_id: 111-11111111-111111-11
+        ```
 
-    Examples of valid response body:
-    ```
-{
-  "title": "tt",
-  "tags": [
-    "#business",
-    "#art"
-  ],
-  "description": "ttt",
-  "start_time": 1706194243.8539546,
-  "end_time": 1706194243.8539546,
-  "location": "ttt",
-  "public": true,
-  "id": "9a1d8924-cc97-43eb-8432-6ed9f0da9a62",
-  "organizer_name": "example",
-  "organizer_id": "d7b01a4d-6f76-4c25-9508-8bd08d869bab",
-  "admins": [
-    "d7b01a4d-6f76-4c25-9508-8bd08d869bab"
-  ],
-  "participants": null,
-  "requests_to_join": null,
-  "weather": [
+        Examples of valid response body:
+        ```
     {
-      "date": "2024-01-25T00:00:00",
-      "hourly_data": [
+      "title": "tt",
+      "tags": [
+        "#business",
+        "#art"
+      ],
+      "description": "ttt",
+      "start_time": 1706194243.8539546,
+      "end_time": 1706194243.8539546,
+      "location": "ttt",
+      "public": true,
+      "id": "9a1d8924-cc97-43eb-8432-6ed9f0da9a62",
+      "organizer_name": "example",
+      "organizer_id": "d7b01a4d-6f76-4c25-9508-8bd08d869bab",
+      "admins": [
+        "d7b01a4d-6f76-4c25-9508-8bd08d869bab"
+      ],
+      "participants": null,
+      "requests_to_join": null,
+      "weather": [
         {
-          "time": "2024-01-25T00:00:00",
-          "temperature_2m": 5.8,
-          "relative_humidity_2m": 97,
-          "dew_point_2m": 5.4,
-          "apparent_temperature": 4.5,
-          "precipitation_probability": 0,
-          "precipitation": 0,
-          "rain": 0,
-          "snowfall": 0,
-          "snow_depth": 0,
-          "wind_speed_80m": 7.4,
-          "temperature_180m": 11.6,
-          "soil_temperature_6cm": 5
-        },
+          "date": "2024-01-25T00:00:00",
+          "hourly_data": [
+            {
+              "time": "2024-01-25T00:00:00",
+              "temperature_2m": 5.8,
+              "relative_humidity_2m": 97,
+              "dew_point_2m": 5.4,
+              "apparent_temperature": 4.5,
+              "precipitation_probability": 0,
+              "precipitation": 0,
+              "rain": 0,
+              "snowfall": 0,
+              "snow_depth": 0,
+              "wind_speed_80m": 7.4,
+              "temperature_180m": 11.6,
+              "soil_temperature_6cm": 5
+            },
+            {
+              "time": "2024-01-25T01:00:00",
+              "temperature_2m": 5.8,
+              "relative_humidity_2m": 96,
+              "dew_point_2m": 5.2,
+              "apparent_temperature": 4.5,
+              "precipitation_probability": 0,
+              "precipitation": 0,
+              "rain": 0,
+              "snowfall": 0,
+              "snow_depth": 0,
+              "wind_speed_80m": 6.5,
+              "temperature_180m": 11,
+              "soil_temperature_6cm": 4.6
+            }, },
         {
-          "time": "2024-01-25T01:00:00",
-          "temperature_2m": 5.8,
-          "relative_humidity_2m": 96,
-          "dew_point_2m": 5.2,
-          "apparent_temperature": 4.5,
-          "precipitation_probability": 0,
-          "precipitation": 0,
-          "rain": 0,
-          "snowfall": 0,
-          "snow_depth": 0,
-          "wind_speed_80m": 6.5,
-          "temperature_180m": 11,
-          "soil_temperature_6cm": 4.6
-        }, },
-    {
-      "date": "2024-01-26T00:00:00",
-      "hourly_data": [
-        {
-          "time": "2024-01-26T00:00:00",
-          "temperature_2m": 8,
-          "relative_humidity_2m": 90,
-          "dew_point_2m": 6.4,
-          "apparent_temperature": 6.6,
-          "precipitation_probability": 0,
-          "precipitation": 0,
-          "rain": 0,
-          "snowfall": 0,
-          "snow_depth": 0,
-          "wind_speed_80m": 4.7,
-          "temperature_180m": 10.1,
-          "soil_temperature_6cm": 6.5
-        },
-        {
-          "time": "2024-01-26T01:00:00",
-          "temperature_2m": 7.7,
-          "relative_humidity_2m": 92,
-          "dew_point_2m": 6.5,
-          "apparent_temperature": 6.6,
-          "precipitation_probability": 0,
-          "precipitation": 0,
-          "rain": 0,
-          "snowfall": 0,
-          "snow_depth": 0,
-          "wind_speed_80m": 4.9,
-          "temperature_180m": 10.2,
-          "soil_temperature_6cm": 6.4
-        },
-        etc
+          "date": "2024-01-26T00:00:00",
+          "hourly_data": [
+            {
+              "time": "2024-01-26T00:00:00",
+              "temperature_2m": 8,
+              "relative_humidity_2m": 90,
+              "dew_point_2m": 6.4,
+              "apparent_temperature": 6.6,
+              "precipitation_probability": 0,
+              "precipitation": 0,
+              "rain": 0,
+              "snowfall": 0,
+              "snow_depth": 0,
+              "wind_speed_80m": 4.7,
+              "temperature_180m": 10.1,
+              "soil_temperature_6cm": 6.5
+            },
+            {
+              "time": "2024-01-26T01:00:00",
+              "temperature_2m": 7.7,
+              "relative_humidity_2m": 92,
+              "dew_point_2m": 6.5,
+              "apparent_temperature": 6.6,
+              "precipitation_probability": 0,
+              "precipitation": 0,
+              "rain": 0,
+              "snowfall": 0,
+              "snow_depth": 0,
+              "wind_speed_80m": 4.9,
+              "temperature_180m": 10.2,
+              "soil_temperature_6cm": 6.4
+            },
+            etc
+            }
+          ]
         }
       ]
     }
-  ]
-}
-    ```
+        ```
     """
     event = shared_functions.get_event_by_id(event_id=event_id)
 
@@ -271,6 +271,72 @@ def get_single_event(
 
         return event
     raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Location not found")
+
+@event_management_router.get("/events/{event_id}/v2", tags=[Tags.EVENT])
+def get_single_event_v2(
+    event_id: str, current_user: User = Depends(auth_helper.get_current_user)
+):
+    """
+        Endpoint utility for retrieving a single event by its ID.
+        ```
+        Args:
+            event_id: The unique identifier of the event
+            current_user: Current logged-in user (retrieved via authentication)
+
+        Returns:
+            Event object with details if the user is authorized to view it
+
+        Raises:
+            [401]UNAUTHORIZED: Invalid credentials or not logged in
+            [404]NOT_FOUND: Event not found or location not found for weather data
+            [403]FORBIDDEN: User not authorized to view the event
+        ```
+        Examples of valid request body:
+        ```
+        event_id: 111-11111111-111111-11
+        ```
+
+        Examples of valid response body:
+        ```
+    {
+      "title": "tt",
+      "tags": [
+        "#business",
+        "#art"
+      ],
+      "description": "ttt",
+      "start_time": 1706194243.8539546,
+      "end_time": 1706194243.8539546,
+      "location": "ttt",
+      "public": true,
+      "id": "9a1d8924-cc97-43eb-8432-6ed9f0da9a62",
+      "organizer_name": "example",
+      "organizer_id": "d7b01a4d-6f76-4c25-9508-8bd08d869bab",
+      "admins": [
+        "d7b01a4d-6f76-4c25-9508-8bd08d869bab"
+      ],
+      "participants": null,
+      "requests_to_join": null,
+      "weather: null
+            }
+          ]
+        }
+      ]
+    }
+    ```
+    """
+    event = shared_functions.get_event_by_id(event_id=event_id)
+
+    if not event.public and not current_user.id in (event.participants or set()) | (
+        event.admins or set()
+    ):
+        return Event(
+            title=event.title,
+            id=event.id,
+            description=event.description,
+            public=event.public,
+        )
+    return event
 
 
 @event_management_router.get("/events", tags=[Tags.EVENT], response_model=List[Event])

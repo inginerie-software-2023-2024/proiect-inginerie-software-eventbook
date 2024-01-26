@@ -1,4 +1,6 @@
-# config script
+"""
+Main module for running the application
+"""
 
 import sys
 import pathlib
