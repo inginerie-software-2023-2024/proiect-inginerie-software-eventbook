@@ -1,0 +1,109 @@
+#application-header {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+  height: 3.5em;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+#application-header.scrolled {
+  background-color: #10151ade;
+  transition: background-color 0.7s;
+}
+
+.app-name {
+  color: aliceblue;
+  font-size: 2em;
+  padding-left: 1.8em;
+  font-family: "Rubik Burned";
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 100%;
+  width: 17.33em;
+}
+#logo-img-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: white;
+  margin-left: 0.8em;
+}
+.logo {
+  position: absolute;
+  height: 70%;
+  width: 70%;
+}
+.navigation-bar {
+  margin-left: 25em;
+}
+.navigation-list {
+  display: flex;
+  gap: 2em;
+}
+.navigation-list li {
+  list-style: none;
+  font-size: 1.25em;
+  font-family: "Playfair Display:Regular 400 Italic";
+  color: aliceblue;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  transition: color 0.3s ease;
+}
+.navigation-list li:hover {
+  color: rgba(240, 248, 255, 0.523);
+}
+
+.login-register-buttons {
+  display: flex;
+  gap: 3em;
+}
+.login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.8em;
+  width: 8em;
+  right: 1.1em;
+  border-radius: 4em;
+  background-color: #10151a5e;
+  cursor: pointer;
+  border: solid white 1px;
+  color: white;
+  transition: all 0.4s ease-in-out;
+  margin-right: 3em;
+}
+
+.register-button:hover {
+  background-color: rgba(240, 248, 255, 0.512);
+  color: #10151ade;
+}
+
+.login-button:hover {
+  background-color: rgba(240, 248, 255, 0.512);
+  color: #10151ade;
+}
+
+.login-register-text {
+  font-size: 1.4em;
+  font-family: "Playfair Display:Regular 400 Italic";
+  text-decoration: none;
+  margin-right: 0.2em;
+}
+
+.no-underline-link {
+  text-decoration: none;
+}

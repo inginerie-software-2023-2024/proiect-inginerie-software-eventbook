@@ -1,0 +1,42 @@
+.hero-page-container {
+  height: calc(100vh - 56px);
+  background-image: url("../assets/jakob-dalbjorn-cuKJre3nyYc-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.75;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5em;
+}
+
+.title {
+  margin-top: 4em;
+  font-family: "Climate Crisis";
+  font-size: 3em;
+  color: black;
+  text-shadow: 3px 3px 4px white;
+}
+
+.card-container {
+  width: 40%;
+  height: 35%;
+  background-color: aliceblue;
+  border-radius: 7em;
+  box-shadow: 15px 15px 15px 15px rgba(1, 1, 1, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-description {
+  margin-top: 1em;
+  width: 75%;
+  font-family: "Playfair Display:Regular 400 Italic";
+}
+
+.title-decription {
+  font-family: "Playfair Display:Regular 400 Italic";
+  font-size: 2em;
+}

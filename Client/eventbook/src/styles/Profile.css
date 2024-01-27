@@ -1,0 +1,152 @@
+#main-container {
+  display: flex;
+  gap: 8em;
+}
+
+.profile-details-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  display: flex;
+  gap: 1em;
+}
+
+#details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6em;
+  margin-top: 5em;
+}
+
+.image {
+  margin-top: 2em;
+  width: 14em;
+}
+#profile-card {
+  border-radius: 3.5em;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 36em;
+  height: 19em;
+  background-color: rgba(240, 248, 255, 0.596);
+}
+
+#profile-card-container {
+  margin-top: 3em;
+  display: flex;
+  align-items: flex-start;
+  margin-left: 2.5em;
+}
+
+#username {
+  font-family: "Playfair Display:Regular 400 Italic";
+  font-size: 1.5em;
+}
+
+#email {
+  font-family: "Playfair Display:Regular 400 Italic";
+  font-size: 1.3em;
+}
+
+.email-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.username-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.button {
+  font-size: 1.1em;
+  height: 2.5em;
+  width: 7em;
+  border-radius: 3em;
+  cursor: pointer;
+  border: solid white 1px;
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.button-name {
+  margin-right: 0.4em;
+}
+.card-action-buttons {
+  gap: 0.4em;
+}
+.card-buttons {
+  font-size: 0.85em;
+}
+.card-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+.edit {
+  background-color: #010131;
+}
+
+.delete {
+  background-color: #510b15;
+}
+
+#buttons-container {
+  margin-top: 0.7em;
+  display: flex;
+  gap: 0.3em;
+}
+
+#my-events-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+  margin-top: 3em;
+  height: 35em;
+  width: 40em;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 2em;
+  background-color: rgba(240, 248, 255, 0.596);
+  overflow-y: auto;
+  padding: 2em 0em;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+#events-header {
+  font-family: "Playfair Display:Regular 400 Italic";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+}
+
+.event-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 15em;
+  width: 30em;
+  background-color: #e2dfdf5d;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 2em;
+  padding: 1em 2em;
+}
+
+#event-title,
+#event-description {
+  font-family: "Playfair Display:Regular 400 Italic";
+}
+
+.event-tag {
+  color: #1414f4;
+}

@@ -1,0 +1,73 @@
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+  position: relative;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 30em;
+  height: 35em;
+  border-radius: 6em;
+  gap: 7em;
+  background-color: rgba(240, 248, 255, 0.596);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-title {
+  font-family: "Rubik Burned";
+  font-size: 3em;
+}
+
+.form-input {
+  border: 1px solid black;
+  height: 3em;
+  width: 20em;
+  border-radius: 2em;
+  text-align: center;
+}
+
+.form-input::placeholder {
+  position: center;
+  text-align: center;
+  color: gray;
+}
+
+.register-login-button {
+  margin-top: 1em;
+  border-radius: 4em;
+  background-color: #10151ade;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
+  width: 10em;
+  height: 2.6em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.register-login-button > span {
+  font-size: 1em;
+  color: aliceblue;
+  font-family: "Playfair medium";
+}
+.register-login-button:hover {
+  background-color: #10151a67;
+}
+
+.reddirect {
+  font-family: "Playfair medium";
+  font-size: 1em;
+}
+
+.auth-error {
+  position: absolute;
+  color: red;
+  margin-top: 3em;
+  margin-bottom: 20em;
+  font-size: 0.8em;
+}
