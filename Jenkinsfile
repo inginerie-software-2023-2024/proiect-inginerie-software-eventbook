@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']],
-                         userRemoteConfigs: [[url: 'https://github.com/username/repo.git',
-                         credentialsId: 'your-credentials-id']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/test']],
+                         userRemoteConfigs: [[url: 'https://github.com/inginerie-software-2023-2024/proiect-inginerie-software-eventbook',
+                         credentialsId: '123']]])
             }
         }
         // Other stages...

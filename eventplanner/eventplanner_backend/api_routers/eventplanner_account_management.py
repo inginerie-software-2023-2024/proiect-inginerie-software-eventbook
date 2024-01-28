@@ -230,7 +230,53 @@ def get_user(username: str):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found")
     return user
 
+@account_management_router.get("/users/{user_id}/v1", tags=[Tags.ACCOUNT])
+def get_user(user_id: str):
+    """
+    Endpoint utility to retrieve a user by its username.
 
+    ```
+    Args:
+        user_id: User's id
+
+    Returns:
+        Dictionary with users field
+
+    Raises:
+        [404]NOT_FOUND: User not found
+    ```
+    Example of valid request body:
+    ```
+        username: example
+    ```
+
+    Example of valid response body:
+    ```
+    {
+      "username": "example",
+      "email": "example@emai.com",
+      "password": "$2b$12$QMlcRwaxFSCx7Wx/1XBR/ORKgAkeuQQAQL1iQ/2AZ7I6gMVGPUk66",
+      "id": "d7b01a4d-6f76-4c25-9508-8bd08d869bab",
+      "role": "user",
+      "events_participation": null,
+      "events_created": null,
+      "active_invitations": null,
+      "notifications": null,
+      "token_version": 0,
+      "friends": null
+    }
+    ```
+    """
+    user = shared_functions.get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found")
+    return user
+
+@account_management_router.post("/users/all", tags=[Tags.ACCOUNT])
+def get_all_users():
+    users = users_table.all()
+    users = [{"username": user["username"],"email": user["email"]} for user in users]
+    return users
 @account_management_router.post("/users/logout", tags=[Tags.ACCOUNT])
 def user_logout(current_user: User = Depends(auth_helper.get_current_user)):
     """
@@ -282,8 +328,11 @@ def update_user(
     check_user_existence(
         update_info.username, update_info.email, exclude_id=current_user.id
     )
-    update_data = update_info.model_dump(exclude_unset=True)
-    update_data["password"] = auth_helper.get_password_hash(update_info.password)
+    update_data = update_info
+    if update_data.password!= "N/A":
+        update_data.password = auth_helper.get_password_hash(update_info.password)
+    else:
+        update_data.password = current_user.password
 
     users_table.update(update_data, user_query.id == current_user.id)
     return {"message": "User updated successfully"}
