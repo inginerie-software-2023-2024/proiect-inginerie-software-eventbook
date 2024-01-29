@@ -343,7 +343,7 @@ def get_single_event_v2(
 def get_events(
     title: str = None,
     location: str = None,
-    tags: List[EventTags] = Query([]),
+    tags: EventTags = Query([]),
     organizer_name: str = None,
     start_date: float = None,
     end_date: float = None,
@@ -409,7 +409,7 @@ def get_events(
     if start_date:
         conditions.append(events_query.start_date >= start_date)
     if tags:
-        conditions.append(events_query.tags.any(tag.value for tag in tags))
+        conditions.append(events_query.tags == tags)
     if end_date:
         conditions.append(events_query.end_date <= end_date)
     if public is not None:
