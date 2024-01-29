@@ -273,9 +273,10 @@ def get_user(user_id: str):
     return user
 
 @account_management_router.post("/users/all", tags=[Tags.ACCOUNT])
-def get_all_users():
+def get_all_users(current_user= Depends(auth_helper.get_current_user)):
     users = users_table.all()
-    users = [{"username": user["username"],"email": user["email"]} for user in users]
+
+    users = [{"username": user["username"],"email": user["email"]} for user in users if user["id"]!= current_user.id]
     return users
 @account_management_router.post("/users/logout", tags=[Tags.ACCOUNT])
 def user_logout(current_user: User = Depends(auth_helper.get_current_user)):
