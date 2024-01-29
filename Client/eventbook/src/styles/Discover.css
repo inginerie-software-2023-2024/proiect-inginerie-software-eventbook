@@ -1,0 +1,43 @@
+.discover-container {
+  padding: 2em 7em;
+  padding-bottom: 0em;
+}
+.discover-header {
+  font-size: 2.4em;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.5em;
+  text-align: center;
+  color: #2f3338;
+}
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 3em;
+  padding: 2em;
+}
+
+.user-card {
+  font-size: 14px;
+  margin: 0 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+  padding-top: 0;
+  border-radius: 0.5em;
+  background-color: #e2dfdf5d;
+  color: #2f3338;
+}
+.username-and-email {
+  transform: translateY(-0.6em);
+}
+#person {
+  font-size: 13em;
+}
+.username {
+  font-size: 1.2em;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}

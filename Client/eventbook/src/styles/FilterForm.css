@@ -1,0 +1,84 @@
+.filter-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em;
+  width: 15em;
+  flex-direction: column;
+  position: fixed;
+  margin-top: 3.2em;
+  margin-left: 3.5em;
+}
+
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  margin-left: 18px;
+}
+
+.tag-item {
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  font-family: "Playfair medium";
+}
+
+.filter-input {
+  border: 1px solid black;
+  height: 3em;
+  width: 17em;
+  border-radius: 1em;
+  text-align: center;
+}
+
+.filter-input::placeholder {
+  position: center;
+  text-align: center;
+  color: gray;
+}
+
+.custom-checkbox {
+  display: none;
+}
+
+.checkbox-style {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  border: 2px solid #555;
+  border-radius: 10px;
+  background-color: white;
+  vertical-align: middle;
+  position: relative;
+}
+
+.custom-checkbox:checked + .checkbox-style {
+  background-color: #2f3338;
+  border-color: #007bff;
+}
+
+.filter-button {
+  height: 2.8em;
+  width: 8em;
+  right: 1.1em;
+  border-radius: 4em;
+  background-color: #2f3338;
+  cursor: pointer;
+  border: solid white 1px;
+  color: white;
+  transition: all 0.4s ease-in-out;
+  margin-top: 1em;
+}
+
+.filter-button:hover {
+  background-color: #2f33389d;
+  color: #10151ade;
+}
+
+.filter-button-text {
+  font-size: 1.4em;
+  font-family: "Playfair Display:Regular 400 Italic";
+}

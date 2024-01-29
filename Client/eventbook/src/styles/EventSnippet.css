@@ -1,0 +1,42 @@
+.feed-card {
+  width: 40em;
+  gap: 8em;
+  display: flex;
+  flex-direction: row;
+}
+
+#event-title {
+  margin-bottom: 2em;
+}
+
+#event-date,
+#event-location {
+  font-family: "Playfair Display:Regular 400 Italic";
+}
+
+.event-image {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+}
+.event-details-subcontainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+.contents {
+  gap: 6em;
+  display: flex;
+  flex-direction: row;
+}
+
+.location-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 10em;
+}
+.location-icon {
+  position: absolute;
+  left: -1.2em;
+}

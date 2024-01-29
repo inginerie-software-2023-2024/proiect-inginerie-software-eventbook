@@ -1,0 +1,50 @@
+#events-feed-container {
+  display: flex;
+  align-items: center;
+  margin-top: 3em;
+  margin-bottom: 1.5em;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.host-event-container {
+  position: fixed;
+  right: 2em;
+  margin-top: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 15em;
+  width: 20em;
+  gap: 2em;
+  border-radius: 3.5em;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #e2dfdf5d;
+}
+
+.add-event-button {
+  height: 4em;
+  width: 15em;
+  border-radius: 4em;
+  background-color: #2f3338;
+  cursor: pointer;
+  border: solid white 1px;
+  color: white;
+  transition: all 0.4s ease-in-out;
+}
+
+.add-event-button:hover {
+  background-color: #2f33389d;
+  color: #10151ade;
+}
+
+.host-text-button {
+  font-size: 1.4em;
+  font-family: "Playfair Display:Regular 400 Italic";
+}
+
+.host-event-text {
+  font-family: "Playfair Display:Regular 400 Italic";
+  font-size: 1.5em;
+}

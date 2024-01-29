@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Form.css";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,8 +37,8 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(`${data.detail}`);
       }
-      localStorage.setItem("authToken", data.access_token);
-      console.log(data);
+      loginUser(data.access_token);
+      navigate("/profile");
       setUsername("");
       setPassword("");
     } catch (err) {
