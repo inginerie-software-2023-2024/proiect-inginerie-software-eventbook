@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function EditEventModal({ event, onClose }) {
+function EditEventModal({ event, onClose, isEdit }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: event.title || "",
@@ -47,6 +47,7 @@ function EditEventModal({ event, onClose }) {
     "theather",
     "tech",
     "party",
+    "meetup",
   ];
 
   const handleChange = (e) => {
@@ -70,51 +71,130 @@ function EditEventModal({ event, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(event.id);
-    console.log(formData);
-    const payload = {
-      title: formData.title,
-      description: formData.description,
-      location: formData.location,
-      public: formData.public,
-      ...(formData.start_time && {
-        start_time: Math.floor(new Date(formData.start_time).getTime() / 1000),
-      }),
-      ...(formData.end_time && {
-        end_time: Math.floor(new Date(formData.end_time).getTime() / 1000),
-      }),
-      ...(formData.tags.length > 0 && { tags: formData.tags }),
-    };
 
-    try {
-      const token = localStorage.getItem("authToken");
-      const response = await fetch(`http://127.0.0.1:8080/events/${event.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(`${data.detail}`);
+    if (isEdit) {
+      try {
+        const payload = {
+          title: formData.title,
+          description: formData.description,
+          location: formData.location,
+          public: formData.public,
+          ...(formData.start_time && {
+            start_time: Math.floor(
+              new Date(formData.start_time).getTime() / 1000
+            ),
+          }),
+          ...(formData.end_time && {
+            end_time: Math.floor(new Date(formData.end_time).getTime() / 1000),
+          }),
+          ...(formData.tags.length > 0 && { tags: formData.tags }),
+        };
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(
+          `http://127.0.0.1:8080/events/${event.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`${data.detail}`);
+        }
+        toast.success("Event Edited Successfully", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setTimeout(() => {
+          refreshPage();
+        }, 2000);
+      } catch (err) {
+        toast.error("Error Editing Event", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
-      toast.success("Event submission successful", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      setTimeout(() => {
-        refreshPage();
-      }, 2000);
-    } catch (err) {
-      console.error(err);
+    } else {
+      try {
+        const token = localStorage.getItem("authToken");
+
+        const toUnixTimestamp = (dateString) => {
+          const date = new Date(dateString);
+          return isNaN(date.getTime())
+            ? null
+            : Math.floor(date.getTime() / 1000);
+        };
+
+        const params = {
+          title: encodeURIComponent(formData.title),
+          description: encodeURIComponent(formData.description),
+          location: encodeURIComponent(formData.location),
+          tags: formData.tags.map((tag) => encodeURIComponent("#" + tag)), // Prefix tags with '#'
+          start_time: toUnixTimestamp(formData.start_time),
+          end_time: toUnixTimestamp(formData.end_time),
+          public: formData.public,
+        };
+
+        let queryString = `title=${params.title}&description=${params.description}&location=${params.location}`;
+        params.tags.forEach((tag) => (queryString += `&tags=${tag}`));
+
+        if (params.start_time)
+          queryString += `&start_time=${params.start_time}`;
+        if (params.end_time) queryString += `&end_time=${params.end_time}`;
+
+        queryString += `&public=${params.public}`;
+
+        const response = await fetch(
+          `http://127.0.0.1:8080/events/register?${queryString}`,
+          {
+            method: "POST",
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`${data.detail}`);
+        }
+
+        toast.success("Event Uploaded Successfully", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        setTimeout(() => {
+          navigate("/refresh");
+          setTimeout(() => {
+            navigate(`/events/${data.id_event}`);
+          }, 10);
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+        toast.error(`Error Uploading Event: ${err.message}`, {});
+      }
     }
   };
 
@@ -133,7 +213,7 @@ function EditEventModal({ event, onClose }) {
         <button type="button" onClick={onClose} className="close-edit-event">
           <CloseIcon fontSize="large" />
         </button>
-        <h2>Edit Event</h2>
+        <h2>{isEdit ? "Edit Event" : "Upload Event"}</h2>
 
         <label>Title:</label>
         <input

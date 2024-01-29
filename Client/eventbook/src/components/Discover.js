@@ -40,7 +40,7 @@ function Discover() {
           ))}
         </div>
       ) : (
-        <p>No other users</p>
+        <p className="no-users">No other users found</p>
       )}
     </div>
   );

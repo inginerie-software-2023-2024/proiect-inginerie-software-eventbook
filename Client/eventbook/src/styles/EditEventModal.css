@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 100000;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -67,6 +67,9 @@ select {
   gap: 1em;
   margin-top: 0.2em;
   color: #4a79b7;
+}
+input:focus {
+  outline: 1.5px solid #000000;
 }
 .edit-form-submit {
   font-size: 16px;

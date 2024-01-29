@@ -28,7 +28,7 @@
   box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
   width: 36em;
   height: 19em;
-  background-color: rgba(240, 248, 255, 0.596);
+  background-color: #e2dfdf5d;
 }
 
 #profile-card-container {
@@ -89,6 +89,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.2em;
+  margin-left: 20em;
 }
 .edit {
   background-color: #010131;
@@ -114,7 +115,7 @@
   width: 40em;
   box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2em;
-  background-color: rgba(240, 248, 255, 0.596);
+  background-color: #e2dfdf5d;
   overflow-y: auto;
   padding: 2em 0em;
   &::-webkit-scrollbar {
@@ -132,8 +133,9 @@
 
 .event-card {
   display: flex;
+
   align-items: center;
-  justify-content: space-between;
+
   height: 15em;
   width: 35em;
   background-color: #e2dfdf5d;
@@ -197,4 +199,67 @@
 .confirm-text {
   font-size: 1.4em;
   text-align: center;
+}
+.view-join {
+  background: #10151ade;
+}
+.approval-popup-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#approval-popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20em;
+  padding: 4em 3em;
+  background-color: #fff;
+  border-radius: 2em;
+}
+.cancel-button {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  margin: 1em;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0.2em;
+  margin: 0;
+  color: #10151ade;
+  background-color: transparent;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+.cancel-button:hover {
+  opacity: 0.8;
+}
+
+.approve-button {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 1em;
+  padding: 0.5em 2em;
+  width: 100%;
+  border-radius: 2em;
+  color: white;
+  background-color: #2f3338;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.approve-button:hover {
+  opacity: 0.8;
+}
+#approve {
+  font-size: 22px;
 }

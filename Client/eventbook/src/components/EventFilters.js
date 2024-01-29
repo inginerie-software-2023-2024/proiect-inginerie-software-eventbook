@@ -22,12 +22,12 @@ const tags = [
   "networking",
   "science",
   "sports",
-  "tech",
   "travel",
   "workshop",
   "theather",
   "tech",
   "party",
+  "meetup",
 ];
 
 function EventFilter({ onFilter }) {

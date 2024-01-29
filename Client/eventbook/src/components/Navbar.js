@@ -47,10 +47,6 @@ function Navbar() {
               Profile
             </li>
           </Link>
-          <li>
-            <NotificationsIcon />
-            Notifications
-          </li>
         </ul>
       </nav>
       {isLoggedIn ? (

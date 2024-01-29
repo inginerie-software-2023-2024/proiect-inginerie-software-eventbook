@@ -162,7 +162,11 @@ function Profile() {
             ))
           )}
           {editingEvent && (
-            <EditEventModal event={editingEvent} onClose={closeEditModal} />
+            <EditEventModal
+              event={editingEvent}
+              onClose={closeEditModal}
+              isEdit={true}
+            />
           )}
         </div>
 
