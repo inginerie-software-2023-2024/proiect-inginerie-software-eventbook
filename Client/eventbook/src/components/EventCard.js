@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,6 +9,35 @@ import CloseIcon from "@mui/icons-material/Close";
 function EventCard({ event, onEventDeleted, onEditClicked }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showApprovalPopup, setShowApprovalPopup] = useState(false);
+  const [participants, setParticipants] = useState([]);
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(
+          `http://127.0.0.1:8080/events/${event.id}/participants`,
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setParticipants(data.participants);
+      } catch (error) {
+        console.error("Failed to fetch participants:", error);
+      }
+    };
+
+    fetchParticipants();
+  }, [event.id]);
+
 
   const handleEditClick = () => {
     onEditClicked(event);
@@ -138,6 +167,17 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
     </div>
   );
 
+  const ParticipantsList = () => (
+    <div className="participants-list-container">
+      <h4>Participants:</h4>
+      <ul>
+        {participants.map((participant, index) => (
+          <li key={index}>{participant}</li>
+        ))}
+      </ul>
+    </div>
+  );
+
   return (
     <div className="event-card">
       <ToastContainer />
@@ -175,6 +215,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           </button>
         )}
         {showApprovalPopup && <ApprovalPopup />}
+        <ParticipantsList /> {/* Afișează lista de participanți */}
       </div>
     </div>
   );
