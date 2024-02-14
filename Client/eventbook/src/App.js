@@ -10,6 +10,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import UserPage from "./components/UserPage";
 import EventsFeed from "./components/EventsFeed";
 import SingleEvent from "./components/SingleEvent";
+import Inbox from "./components/Inbox";
+
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+            <Route path="/inbox" element={<Inbox />} />
+
         </Routes>
       </Router>
     </AuthProvider>

@@ -4,6 +4,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { jwtDecode } from "jwt-decode";
+
 
 function EditEventModal({ event, onClose, isEdit }) {
   const navigate = useNavigate();
@@ -69,6 +71,47 @@ function EditEventModal({ event, onClose, isEdit }) {
     setFormData((prev) => ({ ...prev, tags: selectedTags }));
   };
 
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.id;
+    }
+    return null;
+  };
+
+
+  const sendEventUpdateNotification = async () => {
+    try {
+      const updatedNotification = {
+        content: "Event has been updated.",
+        notification_type: "event_update",
+      };
+
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        throw new Error("User ID not found in token");
+      }
+
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedNotification),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send event update notification");
+      }
+    } catch (error) {
+      console.error('Failed to send event update notification:', error);
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -106,6 +149,9 @@ function EditEventModal({ event, onClose, isEdit }) {
         if (!response.ok) {
           throw new Error(`${data.detail}`);
         }
+
+        await sendEventUpdateNotification();
+
         toast.success("Event Edited Successfully", {
           position: "top-center",
           autoClose: 2000,

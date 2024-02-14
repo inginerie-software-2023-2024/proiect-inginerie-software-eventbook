@@ -111,6 +111,36 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
       </div>
     </div>
   );
+
+    const sendEventUpdateNotification = async () => {
+    try {
+      const updatedNotification = {
+        content: "Event has been deleted.",
+        notification_type: "event_update",
+      };
+
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        throw new Error("User ID not found in token");
+      }
+
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedNotification),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send event delete notification");
+      }
+    } catch (error) {
+      console.error('Failed to send event delete notification:', error);
+    }
+  };
   const deleteEvent = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -125,6 +155,9 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      await sendEventUpdateNotification();
+
       toast.success("Event Deleted", {
         position: "top-center",
         autoClose: 2000,
@@ -167,16 +200,16 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
     </div>
   );
 
-  const ParticipantsList = () => (
-    <div className="participants-list-container">
-      <h4>Participants:</h4>
-      <ul>
-        {participants.map((participant, index) => (
-          <li key={index}>{participant}</li>
-        ))}
-      </ul>
-    </div>
-  );
+  // const ParticipantsList = () => (
+  //   <div className="participants-list-container">
+  //     <h4>Participants:</h4>
+  //     <ul>
+  //       {participants.map((participant, index) => (
+  //         <li key={index}>{participant}</li>
+  //       ))}
+  //     </ul>
+  //   </div>
+  // );
 
   return (
     <div className="event-card">
@@ -215,7 +248,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           </button>
         )}
         {showApprovalPopup && <ApprovalPopup />}
-        <ParticipantsList /> {/* Afișează lista de participanți */}
+
       </div>
     </div>
   );

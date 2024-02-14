@@ -1,0 +1,43 @@
+.inbox-container {
+  padding: 2em 7em;
+  padding-bottom: 0em;
+}
+.inbox-header {
+  font-size: 2.4em;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.5em;
+  text-align: center;
+}
+
+.notifications-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-item {
+  margin-bottom: 1em;
+  padding: 1em;
+  border-radius: 0.5em;
+  background-color: #e2dfdf5d;
+}
+
+.notification-title {
+  font-size: 1.2em;
+  margin: 0;
+  padding: 0;
+}
+
+.notification-content {
+  font-size: 14px;
+}
+
+.notification-timestamp {
+  font-size: 12px;
+}
+
+.no-notifications {
+  font-size: 1.2em;
+  text-align: center;
+}

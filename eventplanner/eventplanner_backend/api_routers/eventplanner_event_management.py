@@ -339,7 +339,7 @@ def get_single_event_v2(
     return event
 
 
-@event_management_router.get("/events", tags=[Tags.EVENT], response_model=List[Event])
+@event_management_router.get("/events", tags=[Tags.EVENT])
 def get_events(
     title: str = None,
     location: str = None,

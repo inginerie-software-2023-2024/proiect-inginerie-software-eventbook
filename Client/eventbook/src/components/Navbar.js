@@ -19,6 +19,7 @@ function Navbar() {
     navigate("/authentication/login");
     logout();
   };
+
   return (
     <div id="application-header" className="scrolled">
       <Link to="/" className="logo-container no-underline-link">
@@ -45,6 +46,12 @@ function Navbar() {
             <li>
               <AccountCircleIcon />
               Profile
+            </li>
+          </Link>
+          <Link to="/inbox" className="no-underline-link">
+            <li>
+              <NotificationsIcon />
+              Inbox
             </li>
           </Link>
         </ul>

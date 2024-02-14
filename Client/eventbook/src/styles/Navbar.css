@@ -52,6 +52,7 @@
   display: flex;
   gap: 2em;
 }
+
 .navigation-list li {
   list-style: none;
   font-size: 1.25em;
@@ -84,7 +85,8 @@
   border: solid white 1px;
   color: white;
   transition: all 0.4s ease-in-out;
-  margin-right: 3em;
+  margin-right: 1em;
+  margin-left: 2.5em;
 }
 
 .register-button:hover {

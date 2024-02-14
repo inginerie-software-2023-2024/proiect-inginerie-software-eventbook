@@ -6,6 +6,8 @@ import sys
 import pathlib
 from os.path import dirname, realpath
 
+from starlette.middleware.cors import CORSMiddleware
+
 sys.path.append(
     str(pathlib.Path(dirname(realpath(__file__)) + "../../../..").resolve())
 )
@@ -43,6 +45,15 @@ app.include_router(notification_management_router)
 app.include_router(weather_management_router)
 
 
+# CORS setup for cross-origin allowance
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 @app.get("/", include_in_schema=False)
 def redirect():
     return RedirectResponse("/docs")
@@ -54,3 +65,4 @@ if __name__ == "__main__":
         port=common.EVENTPLANNER_BACKEND_PORT,
         host=common.EVENTPLANNER_BACKEND_HOST,
     )
+
