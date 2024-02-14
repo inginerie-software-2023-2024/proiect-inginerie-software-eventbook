@@ -12,6 +12,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import CloudIcon from "@mui/icons-material/Cloud";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 function SingleEvent() {
   const [eventData, setEventData] = useState(null);
@@ -28,6 +29,36 @@ function SingleEvent() {
       draggable: true,
       progress: undefined,
     });
+  };
+
+  const sendEventLeaveNotification = async () => {
+    try {
+      const updatedNotification = {
+        content: "Leaved successfully the event",
+        notification_type: "event_update",
+      };
+
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        throw new Error("User ID not found in token");
+      }
+
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedNotification),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send event leave notification");
+      }
+    } catch (error) {
+      console.error('Failed to send event leave notification:', error);
+    }
   };
   const handleLeaveEvent = async () => {
     try {
@@ -48,11 +79,52 @@ function SingleEvent() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      await sendEventLeaveNotification();
+
       console.log("Left event successfully");
       notifySuccess("You have successfully left the event!");
       setIsParticipant(false);
     } catch (error) {
       setError(error.message);
+    }
+  };
+
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.id;
+    }
+    return null;
+  };
+
+  const sendEventUpdateNotification = async () => {
+    try {
+      const updatedNotification = {
+        content: "Joined successfully to event",
+        notification_type: "event_update",
+      };
+
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        throw new Error("User ID not found in token");
+      }
+
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedNotification),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send event join notification");
+      }
+    } catch (error) {
+      console.error('Failed to send event join notification:', error);
     }
   };
 
@@ -78,6 +150,8 @@ function SingleEvent() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      await sendEventUpdateNotification();
 
       console.log("Sucessfully joined");
       notifySuccess("Successfully joined");

@@ -80,6 +80,36 @@ function EditEventModal({ event, onClose, isEdit }) {
     return null;
   };
 
+  const sendEventCreateNotification = async () => {
+    try {
+      const updatedNotification = {
+        content: "Registered successfully the event",
+        notification_type: "event_update",
+      };
+
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        throw new Error("User ID not found in token");
+      }
+
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedNotification),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send event register notification");
+      }
+    } catch (error) {
+      console.error('Failed to send event register notification:', error);
+    }
+  };
+
 
   const sendEventUpdateNotification = async () => {
     try {
@@ -220,6 +250,8 @@ function EditEventModal({ event, onClose, isEdit }) {
         if (!response.ok) {
           throw new Error(`${data.detail}`);
         }
+
+        await sendEventCreateNotification();
 
         toast.success("Event Uploaded Successfully", {
           position: "top-center",
