@@ -64,6 +64,42 @@ function Inbox() {
     return null;
   };
 
+
+
+function handleAcceptInvitation(inviteId, event_id, answer) {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    throw new Error("Token not found");
+  }
+
+  const userId = getUserIdFromToken();
+  if (!userId) {
+    throw new Error("User ID not found in token");
+  }
+  const url = `/invitations/${inviteId}/answer?answer=${answer}&event_id=${event_id}`;
+
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem("authToken")}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to respond to invitation');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Invitation response processed:', data);
+  })
+  .catch(error => {
+    console.error('Error responding to invitation:', error);
+  });
+}
+
+
   const handleDeleteNotification = async (notify_id) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -116,7 +152,10 @@ function Inbox() {
             <div className="notification-item" key={notification["id"]}>
               <h3 className="notification-title">{notification.message}</h3>
               <p className="notification-content">Type: {notification.notification_type}</p>
-              <button onClick={() => handleDeleteNotification(notification["id"])}>Delete</button>
+              {notification.notification_type === "event" && (
+              <button className = "action-button" onClick={() => handleAcceptInvitation(notification["id"])}>Accept</button>
+            )}
+              <button className = "action-button" onClick={() => handleDeleteNotification(notification["id"])}>Delete</button>
             </div>
           ))}
         </div>

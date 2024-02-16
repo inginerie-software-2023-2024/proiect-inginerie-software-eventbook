@@ -69,7 +69,6 @@ function EventsFeed() {
         <EditEventModal
           event={uploadingEvent}
           onClose={closeEditModal}
-          isEdit={false}
         />
       )}
     </>

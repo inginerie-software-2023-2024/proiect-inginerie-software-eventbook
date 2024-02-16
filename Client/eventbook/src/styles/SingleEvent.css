@@ -59,6 +59,20 @@
   transition: all 0.4s ease-in-out;
 }
 
+.add-participant-button{
+  height: 3em;
+  width: 10em;
+  margin-left: 10em;
+  margin-top: 2em;
+
+  background-color: #2f3338;
+  cursor: pointer;
+  border: solid white 1px;
+  color: white;
+  border-radius: 4em;
+  transition: all 0.4s ease-in-out;
+}
+
 .join-event-button:hover {
   background-color: #2f33389d;
   color: #10151ade;
@@ -72,11 +86,37 @@
   box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2em;
   font-family: "Playfair Display:Regular 400 Italic";
-  width: 13em;
+  width: 20em;
   padding: 2em;
 }
 
 .cloud-icon {
   width: 4em;
   margin-left: 1em;
+}
+
+.participants-continer {
+  position: absolute;
+  top: 25em;
+  left: 2em;
+  background-color: #e2dfdf5d;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 2em;
+  font-family: "Playfair Display:Regular 400 Italic";
+  width: 20em;
+  padding: 2em;
+}
+
+.edit-event-modal-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,0 +1,41 @@
+.edit-event-modal-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 40em;
+    padding: 3em 5em;
+    background-color: #fff;
+    border-radius: 2em;
+  }
+
+  .send-invite{
+    height: 3em;
+    width: 10em;
+    margin-left: 10em;
+    margin-top: 2em;
+  
+    background-color: #2f3338;
+    cursor: pointer;
+    border: solid white 1px;
+    color: white;
+    border-radius: 4em;
+    transition: all 0.4s ease-in-out;
+  }
+  
+  .send-invite:hover {
+    background-color: #2f33389d;
+    color: #10151ade;
+  }
