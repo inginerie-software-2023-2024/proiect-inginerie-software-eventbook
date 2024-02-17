@@ -132,31 +132,13 @@ def get_notif(user_id: str):
     """
     Endpoint utility for getting the notifications of a specified user.
 
-    This function creates a notification based on the provided type and content,
-    associates it with the given user ID, and updates the user's notification list
-    in the database.
-
     ```
     Args:
         user_id: The unique identifier of the user to whom the notification is sent.
-        notification_type: The type of the notification, defined by the NotificationType enum.
-        content: The message content of the notification.
 
     Returns:
-        A dictionary with a message indicating successful notification delivery.
+        A dictionary with all the notifications and a message indicating successful notifications delivery.
 
-    Raises:
-        [404]NOT_FOUND: If the specified user ID does not exist in the database.
-        [400]BAD_REQUEST: If the notification type is invalid or the content is empty.
-    ```
-    Example of valid request body:
-    ```
-    {
-        "notification_type": "INVITATION",
-        "user_id": 11111-1111111-11-11111,
-        "content": "Example",
-    }
-    ```
     """
     user = shared_functions.get_user_by_id(user_id)
 
