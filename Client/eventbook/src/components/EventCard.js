@@ -92,17 +92,12 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
     </div>
   );
 
-    const sendEventUpdateNotification = async () => {
+    const sendEventDeleteNotification = async (userId) => {
     try {
       const updatedNotification = {
         content: `Event "${event.title}" has been deleted.`,
         notification_type: "event_update",
       };
-
-      const userId = getUserIdFromToken();
-      if (!userId) {
-        throw new Error("User ID not found in token");
-      }
 
       const token = localStorage.getItem("authToken");
       const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
@@ -121,8 +116,48 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
       console.error('Failed to send event delete notification:', error);
     }
   };
+
+
+
+    const fetchNotifDeleteAllParticipants = async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing");
+      }
+
+      console.log("aaa", id);
+
+      const response = await fetch(`http://localhost:8080/events/${id}/participants`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const participantIds = await response.json();
+
+      // const participantsData = await Promise.all(participantIds.map(async (participantId) => {
+      //   return await sendEventDeleteNotification(participantId);
+      // }));
+
+    return participantIds;
+    } catch (error) {
+      console.error("Failed to get all participants:", error);
+    }
+  };
+
   const deleteEvent = async () => {
     try {
+
+      const id = event.id;
+      const participantIds = await fetchNotifDeleteAllParticipants(id);
+
       const token = localStorage.getItem("authToken");
       const response = await fetch(`http://127.0.0.1:8080/events/${event.id}`, {
         method: "DELETE",
@@ -136,7 +171,9 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      await sendEventUpdateNotification();
+      const participantsData = await Promise.all(participantIds.map(async (participantId) => {
+        return await sendEventDeleteNotification(participantId);
+      }));
 
       toast.success("Event Deleted", {
         position: "top-center",

@@ -111,17 +111,12 @@ function EditEventModal({ event, onClose, isEdit }) {
   };
 
 
-  const sendEventUpdateNotification = async () => {
+  const sendEventUpdateNotification = async (userId) => {
     try {
       const updatedNotification = {
-        content: "Event has been updated.",
+        content: `Event "${event.title}" has been updated.`,
         notification_type: "event_update",
       };
-
-      const userId = getUserIdFromToken();
-      if (!userId) {
-        throw new Error("User ID not found in token");
-      }
 
       const token = localStorage.getItem("authToken");
       const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
@@ -140,6 +135,38 @@ function EditEventModal({ event, onClose, isEdit }) {
       console.error('Failed to send event update notification:', error);
     }
   };
+
+  const fetchNotifUpdateAllParticipants = async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing");
+      }
+
+      const response = await fetch(`http://localhost:8080/events/${id}/participants`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const participantIds = await response.json();
+
+      const participantsData = await Promise.all(participantIds.map(async (participantId) => {
+        return await sendEventUpdateNotification(participantId);
+      }));
+
+
+    } catch (error) {
+      console.error("Failed to send event update notifications:", error);
+    }
+  };
+
 
 
   const handleSubmit = async (e) => {
@@ -180,7 +207,9 @@ function EditEventModal({ event, onClose, isEdit }) {
           throw new Error(`${data.detail}`);
         }
 
-        await sendEventUpdateNotification();
+        const id = event.id;
+
+        await fetchNotifUpdateAllParticipants(id);
 
         toast.success("Event Edited Successfully", {
           position: "top-center",
