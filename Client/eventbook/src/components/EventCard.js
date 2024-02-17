@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { jwtDecode } from "jwt-decode";
@@ -9,35 +10,14 @@ import CloseIcon from "@mui/icons-material/Close";
 function EventCard({ event, onEventDeleted, onEditClicked }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showApprovalPopup, setShowApprovalPopup] = useState(false);
-  const [participants, setParticipants] = useState([]);
-
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
+  const [currentUser, setCurrentUser] = useState(null); 
+    useEffect(() => {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(
-          `http://127.0.0.1:8080/events/${event.id}/participants`,
-          {
-            headers: {
-              accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setCurrentUser(decodedToken); 
         }
-
-        const data = await response.json();
-        setParticipants(data.participants);
-      } catch (error) {
-        console.error("Failed to fetch participants:", error);
-      }
-    };
-
-    fetchParticipants();
-  }, [event.id]);
-
+    }, []);
 
   const handleEditClick = () => {
     onEditClicked(event);
@@ -115,7 +95,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
     const sendEventUpdateNotification = async () => {
     try {
       const updatedNotification = {
-        content: "Event has been deleted.",
+        content: `Event "${event.title}" has been deleted.`,
         notification_type: "event_update",
       };
 
@@ -193,26 +173,15 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
             className="cancel-button modal-button"
             onClick={() => setShowDeleteConfirm(false)}
           >
-            Cancel
+            <CancelIcon />
           </button>
         </div>
       </div>
     </div>
   );
 
-  // const ParticipantsList = () => (
-  //   <div className="participants-list-container">
-  //     <h4>Participants:</h4>
-  //     <ul>
-  //       {participants.map((participant, index) => (
-  //         <li key={index}>{participant}</li>
-  //       ))}
-  //     </ul>
-  //   </div>
-  // );
-
   return (
-    <div className="event-card">
+    <a className="event-card">
       <ToastContainer />
       <div className="event-details-container">
         <h3 id="event-title">{event.title}</h3>
@@ -225,7 +194,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           ))}
         </div>
       </div>
-
+      {currentUser!=null && event.admins.includes(currentUser.id) && (
       <div className="card-action-buttons">
         <button className="button edit card-buttons" onClick={handleEditClick}>
           <EditIcon />
@@ -238,6 +207,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           <ClearIcon />
           <span className="button-name">Delete</span>
         </button>
+
         {showDeleteConfirm && <ConfirmationModal />}
         {event.requests_to_join && event.requests_to_join.length > 0 && (
           <button
@@ -248,9 +218,9 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           </button>
         )}
         {showApprovalPopup && <ApprovalPopup />}
-
       </div>
-    </div>
+      )}
+    </a>
   );
 }
 

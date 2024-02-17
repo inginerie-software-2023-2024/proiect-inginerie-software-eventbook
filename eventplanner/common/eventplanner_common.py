@@ -4,7 +4,7 @@ Module centered around config vars
 from enum import Enum
 
 EVENTPLANNER_BACKEND_PORT = 8080
-EVENTPLANNER_BACKEND_HOST = "127.0.0.1"
+EVENTPLANNER_BACKEND_HOST = "0.0.0.0"
 EVENTPLANNER_BACKEND_APP = "eventplanner_main:app"
 
 

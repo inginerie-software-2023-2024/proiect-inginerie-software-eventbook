@@ -3,20 +3,28 @@ import image2 from "../assets/events_pictures/2.jpg";
 import image3 from "../assets/events_pictures/3.jpg";
 import image4 from "../assets/events_pictures/4.jpg";
 import image5 from "../assets/events_pictures/5.jpg";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams} from "react-router-dom";
 import "../styles/SingleEvent.css";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PersonIcon from "@mui/icons-material/Person";
 import CloudIcon from "@mui/icons-material/Cloud";
+import PlusOneIcon from "@mui/icons-material/AddCircle";
+import FaceIcon from "@mui/icons-material/Face";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import WaterIcon from "@mui/icons-material/Water";
+import WindPowerIcon from "@mui/icons-material/WindPower";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
+import SentInvitationModal from "./SentInvitationModal";
 
 function SingleEvent() {
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [eventData, setEventData] = useState(null);
   const [error, setError] = useState(null);
+  const [participants, setParticipants] = useState([]);
   const { id } = useParams();
   const [isParticipant, setIsParticipant] = useState(false);
   const notifySuccess = (message) => {
@@ -31,10 +39,77 @@ function SingleEvent() {
     });
   };
 
+  const fetchParticipantDetails = async (participantId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing");
+      }
+
+      const response = await fetch(`http://localhost:8080/users/${participantId}/v1`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+
+      const data = await response.json();
+      console.log(data);
+      return data; // returnează detalii despre utilizator
+    } catch (error) {
+      console.error("Failed to fetch participant details:", error);
+      return null;
+    }
+  };
+
+   const fetchEventParticipants = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing");
+      }
+
+      const response = await fetch(`http://localhost:8080/events/${id}/participants`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const participantIds = await response.json();
+
+      // Obține detalii despre fiecare participant
+      const participantsData = await Promise.all(participantIds.map(async (participantId) => {
+        return await fetchParticipantDetails(participantId);
+      }));
+
+      setParticipants(participantsData.filter(participant => participant !== null)); // filtrează participanții care nu au fost găsiți
+    } catch (error) {
+      console.error("Failed to fetch event participants:", error);
+      setError("Failed to fetch event participants");
+    }
+  };
+
+
+  useEffect(() => {
+    fetchEventParticipants();
+  }, [id]);
+
   const sendEventLeaveNotification = async () => {
     try {
       const updatedNotification = {
-        content: "Leaved successfully the event",
+        content: `Left successfully the "${eventData.title}" event`,
         notification_type: "event_update",
       };
 
@@ -84,6 +159,7 @@ function SingleEvent() {
       console.log("Left event successfully");
       notifySuccess("You have successfully left the event!");
       setIsParticipant(false);
+      fetchEventParticipants();
     } catch (error) {
       setError(error.message);
     }
@@ -101,7 +177,7 @@ function SingleEvent() {
   const sendEventUpdateNotification = async () => {
     try {
       const updatedNotification = {
-        content: "Joined successfully to event",
+        content: `Joined successfully to "${eventData.title}" event`,
         notification_type: "event_update",
       };
 
@@ -126,6 +202,10 @@ function SingleEvent() {
     } catch (error) {
       console.error('Failed to send event join notification:', error);
     }
+  };
+
+  const handleOpenInviteModal = () => {
+    setShowInviteModal(true);
   };
 
   const handleJoinEvent = async () => {
@@ -156,6 +236,7 @@ function SingleEvent() {
       console.log("Sucessfully joined");
       notifySuccess("Successfully joined");
       setIsParticipant(true);
+      fetchEventParticipants();
     } catch (error) {
       setError(error.message);
     }
@@ -295,15 +376,45 @@ function SingleEvent() {
         </button>
       </div>
 
+      {/* Participants list */}
+      <div className="participants-continer">
+        <h2>Participants</h2>
+        <ul>
+        { participants.map((participant, index) => (
+          <div className="participants-list">
+            <FaceIcon />
+              <span>{participant.username}</span>
+          </div>
+        )) }
+        </ul>
+        <button
+          className="add-participant-button"
+          onClick= { isParticipant ? handleOpenInviteModal : handleJoinEvent }
+        >
+          <span className="join-text-button">
+            <PlusOneIcon />
+            {isParticipant ? "Add participant" : "Join us"}
+          </span>
+        </button>
+      </div>
+
       {firstWeatherDetail && (
         <div className="weather-event-continer">
           <CloudIcon className="cloud-icon" />
           <div className="weather-details">
-            <p>Temperature: {firstWeatherDetail.temperature_2m}°C</p>
-            <p>Humidity: {firstWeatherDetail.relative_humidity_2m}%</p>
-            <p>Wind Speed: {firstWeatherDetail.wind_speed_80m} km/h</p>
+            <p><ThermostatIcon />Temperature: {firstWeatherDetail.temperature_2m}°C</p>
+            <p><WaterIcon />Humidity: {firstWeatherDetail.relative_humidity_2m}%</p>
+            <p><WindPowerIcon /> Wind Speed: {firstWeatherDetail.wind_speed_80m} km/h</p>
           </div>
         </div>
+      )}
+
+      {showInviteModal && (
+        <SentInvitationModal
+          event={eventData}
+          onClose={() => setShowInviteModal(false)}
+          participants = {participants}
+        />
       )}
     </>
   );

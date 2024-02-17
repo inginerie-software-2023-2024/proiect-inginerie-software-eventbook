@@ -6,6 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 function Inbox() {
   const [notifications, setNotifications] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null); 
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setCurrentUser(decodedToken); 
+        }
+    }, []);
 
   const navigate = useNavigate();
   const refreshPage = () => {
@@ -64,7 +73,36 @@ function Inbox() {
     return null;
   };
 
-  const handleDeleteNotification = async (notify_id) => {
+
+
+  const handleAcceptInvitation = async (notification) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token is missing");
+      }
+      
+      const response = await fetch(`http://localhost:8080/events/${notification.event_id}/join`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log("Sucessfully joined");
+      console.log(notification.id);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
+
+
+  const handleDeleteNotification = async (notify_id, notification=null) => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -76,7 +114,8 @@ function Inbox() {
       if (!userId) {
         throw new Error("User ID not found in token");
       }
-
+      const event_id = notifications.event_id;
+      
       const response = await fetch(`http://127.0.0.1:8080/notifications/${userId}/${notify_id}`, {
         method: 'DELETE',
         headers: {
@@ -88,6 +127,8 @@ function Inbox() {
       if (!response.ok) {
         throw new Error(`Failed to delete notification, status: ${response.status}`);
       }
+      if(event_id)
+        navigate(`http://127.0.0.1:8080/events/${event_id}`);
 
       setTimeout(() => {
           refreshPage();
@@ -102,10 +143,12 @@ function Inbox() {
         draggable: true,
         progress: undefined,
       });
+
     } catch (error) {
       console.error('Failed to delete notification:', error);
     }
   };
+
 
   return (
     <div className="inbox-container">
@@ -116,7 +159,10 @@ function Inbox() {
             <div className="notification-item" key={notification["id"]}>
               <h3 className="notification-title">{notification.message}</h3>
               <p className="notification-content">Type: {notification.notification_type}</p>
-              <button onClick={() => handleDeleteNotification(notification["id"])}>Delete</button>
+              {notification.notification_type == "invitation" && (
+              <button className = "action-button" onClick={() =>  handleAcceptInvitation(notification) && handleDeleteNotification(notification.id,notification)}>Accept</button>
+            )}
+              <button className = "action-button" onClick={() => handleDeleteNotification(notification["id"])}>Delete</button>
             </div>
           ))}
         </div>
