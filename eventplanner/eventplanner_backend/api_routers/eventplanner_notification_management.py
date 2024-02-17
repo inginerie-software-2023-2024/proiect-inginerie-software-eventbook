@@ -20,7 +20,7 @@ notification_management_router = APIRouter()
 
 # Helper function
 def create_and_store_notification(
-    user_id: str, notification_type: NotificationType, content: str
+    user_id: str, notification_type: NotificationType, content: str, event_id: str = "0"
 ):
     notification_id = shared_functions.generate_notification_id(
         user_id, notification_type.value, time.time()
@@ -31,6 +31,7 @@ def create_and_store_notification(
         time=time.time(),
         id=notification_id,
         message=content,
+        event_id=event_id
     )
     return new_notification
 
@@ -38,7 +39,7 @@ def create_and_store_notification(
 @notification_management_router.post(
     "/notifications/{user_id}/notify", tags=[Tags.NOTIFICATION]
 )
-def notify_user(user_id: str, content: str, notification_type: NotificationType = NotificationType.EVENT_UPDATE):
+def notify_user(user_id: str, content: str, notification_type: NotificationType = NotificationType.EVENT_UPDATE, event_id: str = "0"):
     """
     Endpoint utility for sending a notification to a specified user.
 
@@ -69,7 +70,7 @@ def notify_user(user_id: str, content: str, notification_type: NotificationType 
     ```
     """
     user = shared_functions.get_user_by_id(user_id)
-    notification = create_and_store_notification(user_id, notification_type, content)
+    notification = create_and_store_notification(user_id, notification_type, content, event_id)
 
     updated_notifications = user.notifications or set()
     updated_notifications.add(notification)
@@ -78,7 +79,8 @@ def notify_user(user_id: str, content: str, notification_type: NotificationType 
     )
 
     return {"message": "User notified successfully!",
-            "notification_id": notification.id}
+            "notification_id": notification.id,
+            "event_id": event_id}
 
 
 

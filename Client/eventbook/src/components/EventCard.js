@@ -10,6 +10,14 @@ import CloseIcon from "@mui/icons-material/Close";
 function EventCard({ event, onEventDeleted, onEditClicked }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showApprovalPopup, setShowApprovalPopup] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null); 
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setCurrentUser(decodedToken); 
+        }
+    }, []);
 
   const handleEditClick = () => {
     onEditClicked(event);
@@ -173,7 +181,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
   );
 
   return (
-    <div className="event-card">
+    <a className="event-card">
       <ToastContainer />
       <div className="event-details-container">
         <h3 id="event-title">{event.title}</h3>
@@ -186,7 +194,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           ))}
         </div>
       </div>
-
+      {currentUser!=null && event.admins.includes(currentUser.id) && (
       <div className="card-action-buttons">
         <button className="button edit card-buttons" onClick={handleEditClick}>
           <EditIcon />
@@ -199,6 +207,7 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
           <ClearIcon />
           <span className="button-name">Delete</span>
         </button>
+
         {showDeleteConfirm && <ConfirmationModal />}
         {event.requests_to_join && event.requests_to_join.length > 0 && (
           <button
@@ -210,7 +219,8 @@ function EventCard({ event, onEventDeleted, onEditClicked }) {
         )}
         {showApprovalPopup && <ApprovalPopup />}
       </div>
-    </div>
+      )}
+    </a>
   );
 }
 

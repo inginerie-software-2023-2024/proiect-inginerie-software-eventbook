@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import "../styles/RegisterEventForm.css"; // Make sure you have this CSS file
+import "../styles/RegisterEventForm.css"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -56,8 +56,6 @@ function RegisterEventForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Add validation logic here if needed
-
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -83,7 +81,6 @@ function RegisterEventForm() {
       }
 
       toast.success("Event registered successfully");
-      // Handle successful registration, maybe clear form or navigate user
     } catch (err) {
       toast.error(`Error: ${err.message}`);
     }

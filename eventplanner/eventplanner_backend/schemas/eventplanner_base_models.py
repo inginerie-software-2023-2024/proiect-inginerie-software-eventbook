@@ -99,6 +99,7 @@ class Notification(BaseModel):
     id: str
     time: float
     read: bool = False
+    event_id: str = "0"
 
     def __hash__(self):
         return hash(f"{self.id}{self.user_id}{self.time}")

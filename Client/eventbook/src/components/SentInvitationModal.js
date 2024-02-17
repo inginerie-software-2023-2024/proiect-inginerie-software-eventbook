@@ -23,7 +23,7 @@ function SentInvitationModal({ event, onClose , participants}) {
 
     const sendInvitation = async (user) => {
         try {
-            console.log(user.id);
+
             const token = localStorage.getItem("authToken");
             const response = await fetch("http://localhost:8080/invitations", {
                 method: "POST",
@@ -40,7 +40,6 @@ function SentInvitationModal({ event, onClose , participants}) {
                 }),
             });
 
-            console.log(response);
     
             if (!response.ok) {
                 throw new Error("Failed to send invitation");
@@ -120,15 +119,17 @@ function SentInvitationModal({ event, onClose , participants}) {
       };
       
     const sendInvitationNotification = async (user) => {
+        
         try {
           const updatedNotification = {
             content: `Someone invited you to participate at "${event.title}" event`,
             notification_type: "invitation",
+            event_id: event.id,
           };
-    
+          console.log(event.id);
     
           const token = localStorage.getItem("authToken");
-          const response = await fetch(`http://127.0.0.1:8080/notifications/${user.id}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}`, {
+          const response = await fetch(`http://127.0.0.1:8080/notifications/${user.id}/notify?notification_type=${updatedNotification.notification_type}&content=${updatedNotification.content}&event_id=${updatedNotification.event_id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

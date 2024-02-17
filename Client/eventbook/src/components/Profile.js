@@ -10,6 +10,7 @@ import EditProfile from "./EditProfile";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import EditEventModal from "./EditEventModal";
+import { jwtDecode } from "jwt-decode";
 
 function Profile() {
   const navigate = useNavigate();
@@ -17,6 +18,15 @@ function Profile() {
   const [events, setEvents] = useState([]);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); 
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setCurrentUser(decodedToken); 
+        }
+    }, []);
 
   const openEdit = () => setIsEditOpen(true);
   const closeEdit = () => setIsEditOpen(false);
@@ -48,7 +58,8 @@ function Profile() {
         setUserDetails(data);
 
         const eventsResponse = await fetch(
-          `http://127.0.0.1:8080/events?organizer_name=${data.username}`,
+         // `http://127.0.0.1:8080/events?organizer_name=${data.username}`,
+         `http://127.0.0.1:8080/events?`,
           {
             method: "GET",
             headers: {
@@ -113,7 +124,7 @@ function Profile() {
     const updatedEvents = events.filter((event) => event.id !== deletedEventId);
     setEvents(updatedEvents);
   };
-
+  console.log(events);
   return (
     <>
       <ToastContainer />
@@ -153,12 +164,21 @@ function Profile() {
             <p>User has no events</p>
           ) : (
             events.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onEventDeleted={handleEventDeleted}
-                onEditClicked={() => openEditModal(event)}
-              />
+              currentUser!=null && event.admins &&  event.admins.includes(currentUser.id) && (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  onEventDeleted={handleEventDeleted}
+                  onEditClicked={() => openEditModal(event)}
+                />
+              ) || (
+                currentUser!=null && event.participants && event.participants.includes(currentUser.id) && (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+
+                  />
+              ))
             ))
           )}
           {editingEvent && (
